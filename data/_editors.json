@@ -1,67 +1,12 @@
 [
     {
         "role": "owner",
-        "name": "SkeletalVirus",
-        "link": "https://www.youtube.com/channel/UCVifLeNLVQe3mYwRW1IiNnA"
+        "name": "UniverDemonlist",
+        "link": "https://gdbrowser.com/u/univerdemonlist"
     },
     {
-        "role": "trial",
-        "name": "SEDTHEPRODIGY",
-        "link": "https://www.youtube.com/channel/UCDp8z5-vtUg8QJdDM5Yh-tg"
-    },
-    {
-        "role": "helper",
-        "name": "Meep",
-        "link": "https://www.youtube.com/channel/UC3yoBkqkM0lw5a0llt69LxA"
-    },
-    {
-        "role": "helper",
-        "name": "Chubby9000",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "LoveSpectral",
-        "link": "https://www.youtube.com/@loveSpectral/featured"
-    },
-    {
-        "role": "helper",
-        "name": "Willow",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "Whacka",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "Florian",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "NCK",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "GhostPepper",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "Robaleg9",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "SoftMuffin76",
-        "link": "link goes here"
-    },
-    {
-        "role": "helper",
-        "name": "Bobbyp02",
-        "link": "link goes here"
+        "role": "dev",
+        "name": "Prometheus",
+        "link": "https://www.youtube.com/@Prometheus_Alt"
     }
 ]
