@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=1024" />
-        <title>All Extreme Demon List</title>
-        <link rel="icon" href="/list_icon.png" />
+        <title>All Rated Extreme Demon List</title>
+        <link rel="icon" href="/AREDLCircle.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -30,11 +30,18 @@
     <body id="app">
         <header :class="{ dark: store.dark }">
             <div class="logo">
-                <h2>AREDLR</h2>
+                <h2>AREDL</h2>
                 <p>v1.6.5</p>
             </div>
             <nav class="nav">
-
+                <router-link class="nav__tab" to="/">
+                    <span class="type-label-lg">List</span>
+                </router-link>
+                <router-link class="nav__tab" to="/leaderboard">
+                    <span class="type-label-lg">Leaderboard</span>
+                </router-link>
+                <router-link class="nav__tab" to="/roulette">
+                    <span class="type-label-lg">Roulette</span>
                 </router-link>
                 <div class="nav__actions">
                     <button
@@ -46,14 +53,14 @@
                             alt=""
                         />
                     </button>
-                    <a class="nav__icon" href="aredlr.pages.dev">
+                    <a class="nav__icon" href="https://discord.gg/UKC8RnGJvA">
                         <img src="/assets/discord.svg" alt="Discord Logo" />
                     </a>
                     <a
                         class="nav__cta type-label-lg"
-                        href="https://sites.google.com/view/aedltools/home-page"
+                        href="https://forms.gle/T9XwQaiwo1wYKu256"
                         target="_blank"
-                        >Tools</a 
+                        >Submit Record</a 
                     >
                 </div>
             </nav>
