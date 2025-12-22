@@ -1,0 +1,18 @@
+{
+    "id": 28224824,
+    "name": "Yatagarasu",
+    "author": "Trusta",
+    "creators": ["Trusta"],
+    "verifier": "Zoink",
+    "verification": "https://youtu.be/qSdyb-Ft1tk",
+    "percentToQualify": 72,
+    "password": "Not Copyable",
+    "records": [
+        {
+            "user": "Not beaten yet",
+            "link": "https://www.youtube.com/watch?v=wZwCXjVdqz0",
+            "percent": 1,
+            "hz": 360
+        }
+    ]
+}
