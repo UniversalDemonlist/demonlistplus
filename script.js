@@ -11,13 +11,22 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 
+/* HOME → DEMONLIST BUTTON */
+function openDemonlistFromHome() {
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+  document.getElementById("demonlist").classList.add("active");
+  document.querySelector('.tab-btn[data-tab="demonlist"]').classList.add("active");
+}
+
 /* ---------------------------------------------------
    GLOBAL DEMON STORAGE
 --------------------------------------------------- */
-let globalDemons = []; // used for leaderboard + demon pages + profiles
+let globalDemons = [];
 
 /* ---------------------------------------------------
-   LOAD ALL DEMONS IN PARALLEL
+   LOAD ALL DEMONS
 --------------------------------------------------- */
 async function loadDemonList() {
   const list = await fetch("data/list.json").then(r => r.json());
@@ -40,11 +49,28 @@ async function loadDemonList() {
     container.appendChild(card);
   });
 
+  setupSearchBar();
   loadLeaderboard();
 }
 
 /* ---------------------------------------------------
-   YOUTUBE THUMBNAIL & ID
+   SEARCH BAR FILTER
+--------------------------------------------------- */
+function setupSearchBar() {
+  const searchBar = document.getElementById("search-bar");
+
+  searchBar.addEventListener("input", () => {
+    const query = searchBar.value.toLowerCase();
+
+    document.querySelectorAll(".demon-card").forEach(card => {
+      const name = card.querySelector("h2").textContent.toLowerCase();
+      card.style.display = name.includes(query) ? "flex" : "none";
+    });
+  });
+}
+
+/* ---------------------------------------------------
+   YOUTUBE HELPERS
 --------------------------------------------------- */
 function getYoutubeThumbnail(url) {
   if (!url || typeof url !== "string") return null;
@@ -78,7 +104,7 @@ function extractVideoID(url) {
 }
 
 /* ---------------------------------------------------
-   DEMON CARD BUILDER
+   DEMON CARD
 --------------------------------------------------- */
 function createDemonCard(demon) {
   const card = document.createElement("div");
@@ -94,7 +120,6 @@ function createDemonCard(demon) {
     ? demon.creators.join(", ")
     : (demon.creators || "Unknown");
 
-  // UPDATED: 350-point formula
   const demonScore = demon.position <= 75
     ? (350 / Math.sqrt(demon.position))
     : 0;
@@ -108,19 +133,14 @@ function createDemonCard(demon) {
     <p><strong>Verifier:</strong> ${demon.verifier}</p>
     <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
     <p><strong>Score Value:</strong> ${demonScore.toFixed(2)}</p>
-    ${demon.verification ? `<a href="${demon.verification}" target="_blank">Watch verification</a>` : ""}
   `;
 
-  // View Demon Page button
   const viewBtn = document.createElement("button");
   viewBtn.className = "dropdown-btn";
   viewBtn.textContent = "View Demon Page";
-  viewBtn.addEventListener("click", () => {
-    openDemonPage(demon);
-  });
+  viewBtn.addEventListener("click", () => openDemonPage(demon));
   info.appendChild(viewBtn);
 
-  // Records dropdown
   const btn = document.createElement("button");
   btn.className = "dropdown-btn";
   btn.textContent = "Show Records";
@@ -218,7 +238,7 @@ function goBackToList() {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD SYSTEM
+   LEADERBOARD
 --------------------------------------------------- */
 function loadLeaderboard() {
   const players = {};
@@ -227,7 +247,6 @@ function loadLeaderboard() {
     const pos = demon.position;
     const demonScore = pos <= 75 ? 350 / Math.sqrt(pos) : 0;
 
-    // Verifier full points (skip fake names)
     if (demon.verifier && demon.verifier !== "Not beaten yet") {
       const name = demon.verifier;
 
@@ -246,11 +265,9 @@ function loadLeaderboard() {
       });
     }
 
-    // Normal records
     if (Array.isArray(demon.records)) {
       demon.records.forEach(rec => {
 
-        // EXCLUDE "Not beaten yet"
         if (rec.user === "Not beaten yet") return;
 
         const playerName = rec.user;
@@ -269,98 +286,3 @@ function loadLeaderboard() {
           link: rec.link,
           type: "Record"
         });
-      });
-    }
-  });
-
-  const sorted = Object.entries(players)
-    .map(([name, data]) => ({ name, ...data }))
-    .sort((a, b) => b.score - a.score);
-
-  const container = document.getElementById("leaderboard-container");
-  container.innerHTML = "";
-
-  sorted.forEach((p, i) => {
-    const row = document.createElement("div");
-    row.className = "leaderboard-row";
-    row.innerHTML = `
-      <span>${i + 1}</span>
-      <span class="clickable-player" data-player="${p.name}">${p.name}</span>
-      <span>${p.score.toFixed(2)}</span>
-    `;
-    container.appendChild(row);
-  });
-
-  document.querySelectorAll(".clickable-player").forEach(el => {
-    el.addEventListener("click", () => {
-      const name = el.dataset.player;
-      showPlayerProfile(name, sorted.find(p => p.name === name));
-    });
-  });
-}
-
-/* ---------------------------------------------------
-   PLAYER PROFILE VIEW
---------------------------------------------------- */
-function showPlayerProfile(name, playerData) {
-  if (!playerData) return;
-
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-  document.getElementById("profile").classList.add("active");
-
-  const container = document.getElementById("profile-container");
-  container.innerHTML = `
-    <h2>${name}</h2>
-    <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
-    <h3>Records:</h3>
-  `;
-
-  const records = [...playerData.records].sort((a, b) => a.position - b.position);
-
-  records.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "leaderboard-row";
-
-    const posLabel = r.position > 75 ? "Legacy" : "#" + r.position;
-    const typeLabel = r.type === "Verification" ? "(Verification)" : "";
-
-    div.innerHTML = `
-      <span>${posLabel}</span>
-      <span>${r.demon}</span>
-      <span>${r.percent}% ${typeLabel}</span>
-      ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
-    `;
-    container.appendChild(div);
-  });
-}
-
-/* ---------------------------------------------------
-   MODERATORS TAB
---------------------------------------------------- */
-function loadModerators() {
-  const container = document.getElementById("moderators-container");
-
-  const mods = [
-    { name: "UniverDemonlist", role: "Super Moderator" },
-    { name: "PowerGreen", role: "Moderator" },
-    { name: "Prometheus", role: "Developer" }
-  ];
-
-  mods.forEach(mod => {
-    const row = document.createElement("div");
-    row.className = "moderator-row";
-
-    row.innerHTML = `
-      <span>${mod.name}</span>
-      <span class="moderator-role">${mod.role}</span>
-    `;
-
-    container.appendChild(row);
-  });
-}
-
-/* ---------------------------------------------------
-   START
---------------------------------------------------- */
-loadDemonList();
-loadModerators();

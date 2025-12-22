@@ -51,6 +51,35 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
+   HOME PAGE
+--------------------------------------------------- */
+#home {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#home button {
+  margin-top: 20px;
+}
+
+/* ---------------------------------------------------
+   SEARCH BAR
+--------------------------------------------------- */
+#search-bar {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: white;
+  font-size: 16px;
+}
+
+/* ---------------------------------------------------
    DEMONLIST
 --------------------------------------------------- */
 #demon-container {
