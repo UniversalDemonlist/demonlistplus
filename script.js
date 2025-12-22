@@ -4,18 +4,11 @@
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
 
-    // remove active from all buttons
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-
-    // remove active from all tab contents
     document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-    // activate clicked button
     btn.classList.add("active");
-
-    // activate matching tab
-    const tabId = btn.dataset.tab;
-    document.getElementById(tabId).classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
   });
 });
 
@@ -26,6 +19,19 @@ function openDemonlistFromHome() {
 
   document.querySelector('.tab-btn[data-tab="demonlist"]').classList.add("active");
   document.getElementById("demonlist").classList.add("active");
+}
+
+/* ---------------------------------------------------
+   THEME TOGGLE
+--------------------------------------------------- */
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  localStorage.setItem("theme", document.body.classList.contains("light-mode") ? "light" : "dark");
+}
+
+// Load saved theme
+if (localStorage.getItem("theme") === "light") {
+  document.body.classList.add("light-mode");
 }
 
 /* ---------------------------------------------------
