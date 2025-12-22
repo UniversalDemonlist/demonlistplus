@@ -61,9 +61,13 @@ h1, h2, h3 {
    DEMON CARDS
 --------------------------------------------------- */
 #demon-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
+
+  /* Pointercrate-style centered narrow layout */
+  max-width: 750px;
+  margin: 0 auto;
 }
 
 .demon-card {
