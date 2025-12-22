@@ -3,21 +3,29 @@
 --------------------------------------------------- */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
+
+    // remove active from all buttons
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+    // remove active from all tab contents
     document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
+    // activate clicked button
     btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
+
+    // activate matching tab
+    const tabId = btn.dataset.tab;
+    document.getElementById(tabId).classList.add("active");
   });
 });
 
 /* HOME → DEMONLIST BUTTON */
 function openDemonlistFromHome() {
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-  document.getElementById("demonlist").classList.add("active");
   document.querySelector('.tab-btn[data-tab="demonlist"]').classList.add("active");
+  document.getElementById("demonlist").classList.add("active");
 }
 
 /* ---------------------------------------------------
@@ -286,3 +294,98 @@ function loadLeaderboard() {
           link: rec.link,
           type: "Record"
         });
+      });
+    }
+  });
+
+  const sorted = Object.entries(players)
+    .map(([name, data]) => ({ name, ...data }))
+    .sort((a, b) => b.score - a.score);
+
+  const container = document.getElementById("leaderboard-container");
+  container.innerHTML = "";
+
+  sorted.forEach((p, i) => {
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
+    row.innerHTML = `
+      <span>${i + 1}</span>
+      <span class="clickable-player" data-player="${p.name}">${p.name}</span>
+      <span>${p.score.toFixed(2)}</span>
+    `;
+    container.appendChild(row);
+  });
+
+  document.querySelectorAll(".clickable-player").forEach(el => {
+    el.addEventListener("click", () => {
+      const name = el.dataset.player;
+      showPlayerProfile(name, sorted.find(p => p.name === name));
+    });
+  });
+}
+
+/* ---------------------------------------------------
+   PLAYER PROFILE
+--------------------------------------------------- */
+function showPlayerProfile(name, playerData) {
+  if (!playerData) return;
+
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+  document.getElementById("profile").classList.add("active");
+
+  const container = document.getElementById("profile-container");
+  container.innerHTML = `
+    <h2>${name}</h2>
+    <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
+    <h3>Records:</h3>
+  `;
+
+  const records = [...playerData.records].sort((a, b) => a.position - b.position);
+
+  records.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "leaderboard-row";
+
+    const posLabel = r.position > 75 ? "Legacy" : "#" + r.position;
+    const typeLabel = r.type === "Verification" ? "(Verification)" : "";
+
+    div.innerHTML = `
+      <span>${posLabel}</span>
+      <span>${r.demon}</span>
+      <span>${r.percent}% ${typeLabel}</span>
+      ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
+    `;
+    container.appendChild(div);
+  });
+}
+
+/* ---------------------------------------------------
+   MODERATORS
+--------------------------------------------------- */
+function loadModerators() {
+  const container = document.getElementById("moderators-container");
+
+  const mods = [
+    { name: "UniverDemonlist", role: "Super Moderator" },
+    { name: "PowerGreen", role: "Moderator" },
+    { name: "Prometheus", role: "Developer" }
+  ];
+
+  mods.forEach(mod => {
+    const row = document.createElement("div");
+    row.className = "moderator-row";
+
+    row.innerHTML = `
+      <span>${mod.name}</span>
+      <span class="moderator-role">${mod.role}</span>
+    `;
+
+    container.appendChild(row);
+  });
+}
+
+/* ---------------------------------------------------
+   START
+--------------------------------------------------- */
+loadDemonList();
+loadModerators();
