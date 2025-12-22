@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Demonlist +</title>
+  <title>Demonlist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,36 +12,58 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab-btn active" data-tab="demonlist">Demonlist</button>
+    <button class="tab-btn active" data-tab="home">Home</button>
+    <button class="tab-btn" data-tab="demonlist">Demonlist</button>
     <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
     <button class="tab-btn" data-tab="moderators">Moderators</button>
   </div>
 
-  <!-- Demonlist tab -->
-  <div id="demonlist" class="tab-content active">
-    <h1>Demonlist +</h1>
+  <!-- HOME TAB -->
+  <div id="home" class="tab-content active">
+    <h1>Demonlist</h1>
+
+    <p><strong>Welcome to the Demonlist</strong></p>
+
+    <p>
+      An alternative to the Pointercrate list which includes unrated levels and levels verified 
+      with start positions in like 999 runs. We aim to be the most accurate list, which actually 
+      follows opinions instead of glazing Zoink.
+    </p>
+
+    <button class="dropdown-btn" onclick="openDemonlistFromHome()">
+      Go to Demonlist
+    </button>
+  </div>
+
+  <!-- DEMONLIST TAB -->
+  <div id="demonlist" class="tab-content">
+    <h1>Demonlist</h1>
+
+    <!-- SEARCH BAR -->
+    <input type="text" id="search-bar" placeholder="Search demons...">
+
     <div id="demon-container"></div>
   </div>
 
-  <!-- Leaderboard tab -->
+  <!-- LEADERBOARD TAB -->
   <div id="leaderboard" class="tab-content">
     <h1>Leaderboard</h1>
     <div id="leaderboard-container"></div>
   </div>
 
-  <!-- Moderators tab -->
+  <!-- MODERATORS TAB -->
   <div id="moderators" class="tab-content">
     <h1>Moderators</h1>
     <div id="moderators-container"></div>
   </div>
 
-  <!-- Player profile tab -->
+  <!-- PLAYER PROFILE TAB -->
   <div id="profile" class="tab-content">
     <h1>Player profile</h1>
     <div id="profile-container"></div>
   </div>
 
-  <!-- Full demon page tab -->
+  <!-- FULL DEMON PAGE TAB -->
   <div id="demon-page" class="tab-content">
     <div id="demon-page-container"></div>
   </div>
