@@ -229,4 +229,271 @@ function createDemonCard(demon) {
   btn.addEventListener("click", () => {
     const visible = dropdown.style.display === "block";
     dropdown.style.display = visible ? "none" : "block";
-    btn.textContent = visible ? "Show
+    btn.textContent = visible ? "Show Records" : "Hide Records";
+  });
+
+  info.appendChild(btn);
+  info.appendChild(dropdown);
+
+  card.appendChild(img);
+  card.appendChild(info);
+
+  return card;
+}
+
+/* ---------------------------------------------------
+   FULL DEMON PAGE
+--------------------------------------------------- */
+function openDemonPage(demon) {
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+  document.getElementById("demon-page").classList.add("active");
+
+  const container = document.getElementById("demon-page-container");
+  const positionLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
+
+  const demonScore = demon.position <= 75
+    ? (350 / Math.sqrt(demon.position))
+    : 0;
+
+  let recordsHTML = "";
+
+  if (Array.isArray(demon.records) && demon.records.length > 0) {
+    demon.records.forEach(r => {
+      recordsHTML += `
+        <div class="leaderboard-row">
+          <span>${r.user}</span>
+          <span>${r.percent}%</span>
+          <span>${r.hz}hz</span>
+          ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
+        </div>
+      `;
+    });
+  } else {
+    recordsHTML = "<p>No records yet.</p>";
+  }
+
+  const videoId = extractVideoID(demon.verification);
+
+  container.innerHTML = `
+    <button class="dropdown-btn back-btn" onclick="goBackToList()">← Back to List</button>
+
+    <h1>${positionLabel} — ${demon.name}</h1>
+
+    <p><strong>Author:</strong> ${demon.author}</p>
+    <p><strong>Creators:</strong> ${Array.isArray(demon.creators) ? demon.creators.join(", ") : (demon.creators || "Unknown")}</p>
+    <p><strong>Verifier:</strong> ${demon.verifier}</p>
+    <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
+    <p><strong>Score Value:</strong> ${demonScore.toFixed(2)}</p>
+
+    <h2>Verification</h2>
+    ${
+      videoId
+        ? `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`
+        : "<p>No verification video.</p>"
+    }
+
+    <h2>Records</h2>
+    ${recordsHTML}
+  `;
+}
+
+function goBackToList() {
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+  document.getElementById("demonlist").classList.add("active");
+}
+
+/* ---------------------------------------------------
+   LEADERBOARD (MAIN)
+--------------------------------------------------- */
+function loadLeaderboard() {
+  const players = {};
+
+  globalDemons.forEach(demon => {
+    const pos = demon.position;
+    const demonScore = pos <= 75 ? 350 / Math.sqrt(pos) : 0;
+
+    if (demon.verifier && demon.verifier !== "Not beaten yet") {
+      const name = demon.verifier;
+
+      if (!players[name]) {
+        players[name] = { score: 0, records: [] };
+      }
+
+      players[name].score += demonScore;
+
+      players[name].records.push({
+        demon: demon.name,
+        position: demon.position,
+        percent: 100,
+        link: demon.verification || null,
+        type: "Verification"
+      });
+    }
+
+    if (Array.isArray(demon.records)) {
+      demon.records.forEach(rec => {
+
+        if (rec.user === "Not beaten yet") return;
+
+        const playerName = rec.user;
+        const scoreGain = demonScore * (rec.percent / 100);
+
+        if (!players[playerName]) {
+          players[playerName] = { score: 0, records: [] };
+        }
+
+        players[playerName].score += scoreGain;
+
+        players[playerName].records.push({
+          demon: demon.name,
+          position: demon.position,
+          percent: rec.percent,
+          link: rec.link,
+          type: "Record"
+        });
+      });
+    }
+  });
+
+  const sorted = Object.entries(players)
+    .map(([name, data]) => ({ name, ...data }))
+    .sort((a, b) => b.score - a.score);
+
+  const container = document.getElementById("leaderboard-container");
+  container.innerHTML = "";
+
+  sorted.forEach((p, i) => {
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
+    row.innerHTML = `
+      <span>${i + 1}</span>
+      <span class="clickable-player" data-player="${p.name}">${p.name}</span>
+      <span>${p.score.toFixed(2)}</span>
+    `;
+    container.appendChild(row);
+  });
+
+  document.querySelectorAll(".clickable-player").forEach(el => {
+    el.addEventListener("click", () => {
+      const name = el.dataset.player;
+      showPlayerProfile(name, sorted.find(p => p.name === name));
+    });
+  });
+}
+
+/* ---------------------------------------------------
+   LEADERBOARD (MINUS)
+--------------------------------------------------- */
+function loadLeaderboardMinus(demons) {
+  const players = {};
+
+  demons.forEach(demon => {
+    const demonScore = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+
+    if (Array.isArray(demon.records)) {
+      demon.records.forEach(rec => {
+
+        // Only full 100% runs from 0
+        if (rec.percent === 100 && rec.fromZero === true) {
+
+          if (!players[rec.user]) {
+            players[rec.user] = { score: 0, records: [] };
+          }
+
+          players[rec.user].score += demonScore;
+
+          players[rec.user].records.push({
+            demon: demon.name,
+            position: demon.position,
+            link: rec.link
+          });
+        }
+      });
+    }
+  });
+
+  const sorted = Object.entries(players)
+    .map(([name, data]) => ({ name, ...data }))
+    .sort((a, b) => b.score - a.score);
+
+  const container = document.getElementById("leaderboard-minus");
+  container.innerHTML = "";
+
+  sorted.forEach((p, i) => {
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
+    row.innerHTML = `
+      <span>${i + 1}</span>
+      <span>${p.name}</span>
+      <span>${p.score.toFixed(2)}</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* ---------------------------------------------------
+   PLAYER PROFILE
+--------------------------------------------------- */
+function showPlayerProfile(name, playerData) {
+  if (!playerData) return;
+
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+  document.getElementById("profile").classList.add("active");
+
+  const container = document.getElementById("profile-container");
+  container.innerHTML = `
+    <h2>${name}</h2>
+    <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
+    <h3>Records:</h3>
+  `;
+
+  const records = [...playerData.records].sort((a, b) => a.position - b.position);
+
+  records.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "leaderboard-row";
+
+    const posLabel = r.position > 75 ? "Legacy" : "#" + r.position;
+    const typeLabel = r.type === "Verification" ? "(Verification)" : "";
+
+    div.innerHTML = `
+      <span>${posLabel}</span>
+      <span>${r.demon}</span>
+      <span>${r.percent ? r.percent + "%" : ""} ${typeLabel}</span>
+      ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
+    `;
+    container.appendChild(div);
+  });
+}
+
+/* ---------------------------------------------------
+   MODERATORS
+--------------------------------------------------- */
+function loadModerators() {
+  const container = document.getElementById("moderators-container");
+
+  const mods = [
+    { name: "UniverDemonlist", role: "Super Moderator" },
+    { name: "PowerGreen", role: "Moderator" },
+    { name: "Prometheus", role: "Developer" }
+  ];
+
+  mods.forEach(mod => {
+    const row = document.createElement("div");
+    row.className = "moderator-row";
+
+    row.innerHTML = `
+      <span>${mod.name}</span>
+      <span class="moderator-role">${mod.role}</span>
+    `;
+
+    container.appendChild(row);
+  });
+}
+
+/* ---------------------------------------------------
+   START
+--------------------------------------------------- */
+loadDemonList();
+loadDemonListMinus();
+loadModerators();
