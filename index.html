@@ -1,98 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Demonlist +</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- IMPORTANT: your file is named style.css -->
+  <title>Demonlist+</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- FLOATING THEME TOGGLE -->
   <button id="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
-  <!-- Tabs -->
+  <h1>Demonlist+</h1>
+
   <div class="tabs">
     <button class="tab-btn active" data-tab="home">Home</button>
     <button class="tab-btn" data-tab="demonlist">Demonlist</button>
     <button class="tab-btn" data-tab="demonlist-minus">Demonlist -</button>
     <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
-    <button class="tab-btn" data-tab="leaderboard-minus-tab">Leaderboard -</button>
+    <button class="tab-btn" data-tab="leaderboard-minus">Leaderboard -</button>
     <button class="tab-btn" data-tab="moderators">Moderators</button>
+    <button class="tab-btn" data-tab="pointercrate-plus">Pointercrate +</button>
   </div>
 
-  <!-- HOME TAB -->
+  <!-- HOME -->
   <div id="home" class="tab-content active">
-    <h1>Demonlist +</h1>
-
-    <p><strong>Welcome to the Demonlist +</strong></p>
-
-    <p>
-      An alternative to the Pointercrate list. Our goal is to provide a transparent, community-driven
-      demonlist that values every player opinion. We rank unrated levels and levels verified with start positions
-      in like 999 runs, because every achievement deserves recognition.
-      Record submitter: https://sites.google.com/view/aedlr/record-submitter
-    </p>
-
-    <h2>Recent Updates</h2>
-
-    <ul class="updates-list">
-      <li>You can see recent updates in the link above</li>
-    </ul>
-
-    <button class="dropdown-btn" onclick="openDemonlistFromHome()">
-      Go to Demonlist
-    </button>
+    <h2>Welcome to Demonlist+</h2>
+    <p>This is a combined platform for Demonlist+, Demonlist -, and Pointercrate+.</p>
+    <button class="dropdown-btn" onclick="openDemonlistFromHome()">Open Demonlist</button>
   </div>
 
-  <!-- DEMONLIST TAB -->
+  <!-- DEMONLIST (MAIN) -->
   <div id="demonlist" class="tab-content">
-    <h1>Demonlist</h1>
-
-    <input type="text" id="search-bar" placeholder="Search demons...">
-
+    <input id="search-bar" type="text" placeholder="Search demons...">
     <div id="demon-container"></div>
   </div>
 
-  <!-- DEMONLIST - TAB (LIST ONLY) -->
+  <!-- DEMONLIST - -->
   <div id="demonlist-minus" class="tab-content">
-    <h1>Demonlist -</h1>
-
-    <input type="text" id="search-bar-minus" placeholder="Search demons...">
-
+    <input id="search-bar-minus" type="text" placeholder="Search Demonlist - demons...">
     <div id="demon-container-minus"></div>
   </div>
 
-  <!-- LEADERBOARD TAB (MAIN LIST) -->
+  <!-- LEADERBOARD (MAIN) -->
   <div id="leaderboard" class="tab-content">
-    <h1>Leaderboard</h1>
+    <h2>Main Leaderboard</h2>
     <div id="leaderboard-container"></div>
+    <div id="profile" class="subsection">
+      <h2>Player Profile</h2>
+      <div id="profile-container"></div>
+    </div>
   </div>
 
-  <!-- LEADERBOARD - TAB (ONLY DEMONLIST - DEMONS) -->
-  <div id="leaderboard-minus-tab" class="tab-content">
-    <h1>Leaderboard -</h1>
-    <div id="leaderboard-minus"></div>
+  <!-- LEADERBOARD - -->
+  <div id="leaderboard-minus" class="tab-content">
+    <h2>Leaderboard -</h2>
+    <div id="leaderboard-minus-container"></div>
+    <div id="profile-minus" class="subsection">
+      <h2>Player Profile</h2>
+      <div id="profile-minus-container"></div>
+    </div>
   </div>
 
-  <!-- MODERATORS TAB -->
+  <!-- MODERATORS -->
   <div id="moderators" class="tab-content">
-    <h1>Moderators</h1>
+    <h2>Moderators</h2>
     <div id="moderators-container"></div>
   </div>
 
-  <!-- PLAYER PROFILE TAB -->
-  <div id="profile" class="tab-content">
-    <h1>Player profile</h1>
-    <div id="profile-container"></div>
-  </div>
-
-  <!-- FULL DEMON PAGE TAB -->
+  <!-- DEMON PAGE (MAIN LIST / MINUS USE THIS) -->
   <div id="demon-page" class="tab-content">
     <div id="demon-page-container"></div>
+  </div>
+
+  <!-- POINTERCRATE+ -->
+  <div id="pointercrate-plus" class="tab-content">
+    <h2>Pointercrate+</h2>
+    <input id="search-bar-pointercrate" type="text" placeholder="Search Pointercrate+ demons...">
+    <div id="pointercrate-container"></div>
+
+    <h2>Pointercrate+ Leaderboard</h2>
+    <div id="pointercrate-leaderboard"></div>
+
+    <div id="pointercrate-profile-section">
+      <h2>Pointercrate+ Player Profile</h2>
+      <div id="pointercrate-profile-container"></div>
+    </div>
+
+    <div id="pointercrate-demon-page-section">
+      <h2>Pointercrate+ Demon Page</h2>
+      <div id="pointercrate-demon-page-container"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>
