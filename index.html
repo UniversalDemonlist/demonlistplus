@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -17,6 +17,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-tab="home">Home</button>
     <button class="tab-btn" data-tab="demonlist">Demonlist</button>
+    <button class="tab-btn" data-tab="demonlist-minus">Demonlist -</button>
     <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
     <button class="tab-btn" data-tab="moderators">Moderators</button>
   </div>
@@ -28,17 +29,17 @@
     <p><strong>Welcome to the Demonlist +</strong></p>
 
     <p>
-      An alternative to the Pointercrate list. Our goal is to provide a transparent,community-driven
+      An alternative to the Pointercrate list. Our goal is to provide a transparent, community-driven
       demonlist that values every player opinion. We rank unrated levels and levels verified with start positions
-      in like 999 runs,because every achievement deserves recognition.
+      in like 999 runs, because every achievement deserves recognition.
       Record submitter: https://sites.google.com/view/aedlr/record-submitter
     </p>
 
-<h2>Recent Updates</h2>
+    <h2>Recent Updates</h2>
 
-<ul class="updates-list">
-  <li>You can see recent updates in the link above</li>
-</ul>
+    <ul class="updates-list">
+      <li>You can see recent updates in the link above</li>
+    </ul>
 
     <button class="dropdown-btn" onclick="openDemonlistFromHome()">
       Go to Demonlist
@@ -52,6 +53,18 @@
     <input type="text" id="search-bar" placeholder="Search demons...">
 
     <div id="demon-container"></div>
+  </div>
+
+  <!-- DEMONLIST - TAB -->
+  <div id="demonlist-minus" class="tab-content">
+    <h1>Demonlist - (0% Only)</h1>
+
+    <input type="text" id="search-bar-minus" placeholder="Search demons...">
+
+    <div id="demon-container-minus"></div>
+
+    <h2>Leaderboard -</h2>
+    <div id="leaderboard-minus"></div>
   </div>
 
   <!-- LEADERBOARD TAB -->
@@ -80,6 +93,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
