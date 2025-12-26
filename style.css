@@ -65,6 +65,7 @@ h2, h3 {
 --------------------------------------------------- */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -105,10 +106,11 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
-   SEARCH BARS (MAIN + MINUS)
+   SEARCH BARS
 --------------------------------------------------- */
 #search-bar,
-#search-bar-minus {
+#search-bar-minus,
+#search-bar-pointercrate {
   width: 100%;
   max-width: 900px;
   margin: 0 auto 20px auto;
@@ -201,11 +203,14 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD (MAIN + MINUS)
+   LEADERBOARD & PROFILE
 --------------------------------------------------- */
 #leaderboard-container,
-#leaderboard-minus,
-#profile-container {
+#leaderboard-minus-container,
+#profile-container,
+#profile-minus-container,
+#pointercrate-leaderboard,
+#pointercrate-profile-container {
   max-width: 900px;
   margin: 0 auto;
 }
@@ -221,7 +226,9 @@ h2, h3 {
   gap: 10px;
 }
 
-.clickable-player {
+.clickable-player,
+.clickable-player-minus,
+.clickable-player-pointercrate {
   cursor: pointer;
   color: #4da3ff;
 }
@@ -252,31 +259,141 @@ h2, h3 {
 /* ---------------------------------------------------
    DEMON PAGE
 --------------------------------------------------- */
-#demon-page-container {
+#demon-page-container,
+#pointercrate-demon-page-container {
   max-width: 900px;
   margin: 0 auto;
 }
 
-#demon-page-container h1 {
+#demon-page-container h1,
+#pointercrate-demon-page-container h1 {
   text-align: left;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
-#demon-page-container p {
+#demon-page-container p,
+#pointercrate-demon-page-container p {
   margin: 4px 0;
 }
 
-#demon-page-container iframe {
+#demon-page-container iframe,
+#pointercrate-demon-page-container iframe {
   margin-top: 10px;
   max-width: 100%;
 }
 
-#demon-page-container h2 {
+#demon-page-container h2,
+#pointercrate-demon-page-container h2 {
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
 .back-btn {
   margin-bottom: 15px;
+}
+
+/* ---------------------------------------------------
+   POINTERCRATE+ LAYOUT
+--------------------------------------------------- */
+
+#pointercrate-container {
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Pointercrate-like panel */
+.panel {
+  background: var(--card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  overflow: hidden;
+}
+
+.panel:hover {
+  border-color: #4da3ff;
+}
+
+.fade {
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.flex {
+  display: flex;
+}
+
+.mobile-col {
+  flex-direction: row;
+}
+
+@media (max-width: 700px) {
+  .mobile-col {
+    flex-direction: column;
+  }
+}
+
+/* Thumbnail */
+.thumb {
+  display: block;
+  width: 280px;
+  min-width: 280px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.ratio-16-9 {
+  position: relative;
+}
+
+.ratio-16-9::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+
+.thumb-inner {
+  position: absolute;
+  inset: 0;
+}
+
+/* Info */
+.pointercrate-demon-info {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+}
+
+.demon-byline h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.demon-byline h3 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.demon-byline div {
+  text-align: left;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.demon-byline a {
+  color: #4da3ff;
+  text-decoration: none;
+}
+
+.demon-byline a:hover {
+  text-decoration: underline;
 }
