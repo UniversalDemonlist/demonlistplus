@@ -298,17 +298,15 @@ function mergePointercratePlus() {
   pointercrateDemons.forEach(pc => {
     map.set(pc.id, {
       ...pc,
-      position: pc.pcPosition,
+      position: pc.pcPosition,   // ⭐ ALWAYS use Pointercrate position
       source: "pc"
     });
   });
 
-  // Merge Demonlist+ ONLY IF the demon is already on Pointercrate
+  // Merge Demonlist+ ONLY IF demon is already on Pointercrate
   globalDemons.forEach(dl => {
     const existing = map.get(dl.id);
-    if (!existing) return; // ❗ Demonlist-only demons are ignored
-
-    const mergedPosition = Math.min(existing.position, dl.position);
+    if (!existing) return;
 
     const mergedRecords = [
       ...(existing.records || []),
@@ -324,7 +322,7 @@ function mergePointercratePlus() {
       verification: dl.verification || existing.verification,
       percentToQualify: dl.percentToQualify || existing.percentToQualify,
       records: mergedRecords,
-      position: mergedPosition,
+      position: existing.position,   // ⭐ KEEP POINTERCRATE POSITION
       source: "merged"
     });
   });
@@ -332,6 +330,7 @@ function mergePointercratePlus() {
   mergedPointercrateDemons = Array.from(map.values())
     .sort((a, b) => a.position - b.position);
 }
+
 
 /* ---------------------------------------------------
    POINTERCRATE+ LIST RENDERER (PC1 + S2)
@@ -683,4 +682,5 @@ loadDemonList();
 loadDemonListMinus();
 loadModerators();
 loadPointercrateSource();
+
 
