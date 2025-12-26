@@ -105,9 +105,10 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
-   SEARCH BAR
+   SEARCH BARS (MAIN + MINUS)
 --------------------------------------------------- */
-#search-bar {
+#search-bar,
+#search-bar-minus {
   width: 100%;
   max-width: 900px;
   margin: 0 auto 20px auto;
@@ -121,9 +122,10 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
-   DEMONLIST
+   DEMONLIST (MAIN + MINUS)
 --------------------------------------------------- */
-#demon-container {
+#demon-container,
+#demon-container-minus {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -199,9 +201,10 @@ h2, h3 {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD & PROFILE
+   LEADERBOARD (MAIN + MINUS)
 --------------------------------------------------- */
 #leaderboard-container,
+#leaderboard-minus,
 #profile-container {
   max-width: 900px;
   margin: 0 auto;
