@@ -71,7 +71,7 @@ async function loadDemonList() {
 }
 
 /* ---------------------------------------------------
-   LOAD DEMONLIST -
+   LOAD DEMONLIST - (0% ONLY)
 --------------------------------------------------- */
 async function loadDemonListMinus() {
   try {
@@ -86,7 +86,10 @@ async function loadDemonListMinus() {
       )
     );
 
-    minusDemons = demonFiles.filter(Boolean);
+    /* FIXED: assign positions so #undefined disappears */
+    minusDemons = demonFiles
+      .map((d, i) => (d ? { ...d, position: i + 1 } : null))
+      .filter(Boolean);
 
     minusDemons.forEach(demon => {
       const card = createDemonCard(demon);
@@ -393,7 +396,6 @@ function loadLeaderboardMinus(demons) {
     if (Array.isArray(demon.records)) {
       demon.records.forEach(rec => {
 
-        // Only full 100% runs from 0
         if (rec.percent === 100 && rec.fromZero === true) {
 
           if (!players[rec.user]) {
