@@ -29,7 +29,6 @@ function toggleTheme() {
   localStorage.setItem("theme", document.body.classList.contains("light-mode") ? "light" : "dark");
 }
 
-// Load saved theme
 if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light-mode");
 }
@@ -38,9 +37,10 @@ if (localStorage.getItem("theme") === "light") {
    GLOBAL DEMON STORAGE
 --------------------------------------------------- */
 let globalDemons = [];
+let minusDemons = [];
 
 /* ---------------------------------------------------
-   LOAD ALL DEMONS
+   LOAD MAIN DEMONLIST
 --------------------------------------------------- */
 async function loadDemonList() {
   const list = await fetch("data/list.json").then(r => r.json());
@@ -68,7 +68,33 @@ async function loadDemonList() {
 }
 
 /* ---------------------------------------------------
-   SEARCH BAR FILTER
+   LOAD DEMONLIST -
+--------------------------------------------------- */
+async function loadDemonListMinus() {
+  const list = await fetch("data/list_minus.json").then(r => r.json());
+  const container = document.getElementById("demon-container-minus");
+
+  const demonFiles = await Promise.all(
+    list.map(id =>
+      fetch(`data/demons/${id}.json`)
+        .then(r => (r.ok ? r.json() : null))
+        .catch(() => null)
+    )
+  );
+
+  minusDemons = demonFiles.filter(Boolean);
+
+  minusDemons.forEach(demon => {
+    const card = createDemonCard(demon);
+    container.appendChild(card);
+  });
+
+  setupMinusSearch();
+  loadLeaderboardMinus(minusDemons);
+}
+
+/* ---------------------------------------------------
+   SEARCH BAR (MAIN)
 --------------------------------------------------- */
 function setupSearchBar() {
   const searchBar = document.getElementById("search-bar");
@@ -76,7 +102,23 @@ function setupSearchBar() {
   searchBar.addEventListener("input", () => {
     const query = searchBar.value.toLowerCase();
 
-    document.querySelectorAll(".demon-card").forEach(card => {
+    document.querySelectorAll("#demon-container .demon-card").forEach(card => {
+      const name = card.querySelector("h2").textContent.toLowerCase();
+      card.style.display = name.includes(query) ? "flex" : "none";
+    });
+  });
+}
+
+/* ---------------------------------------------------
+   SEARCH BAR (MINUS)
+--------------------------------------------------- */
+function setupMinusSearch() {
+  const searchBar = document.getElementById("search-bar-minus");
+
+  searchBar.addEventListener("input", () => {
+    const query = searchBar.value.toLowerCase();
+
+    document.querySelectorAll("#demon-container-minus .demon-card").forEach(card => {
       const name = card.querySelector("h2").textContent.toLowerCase();
       card.style.display = name.includes(query) ? "flex" : "none";
     });
@@ -252,7 +294,7 @@ function goBackToList() {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD
+   LEADERBOARD (MAIN)
 --------------------------------------------------- */
 function loadLeaderboard() {
   const players = {};
@@ -331,67 +373,58 @@ function loadLeaderboard() {
 }
 
 /* ---------------------------------------------------
-   PLAYER PROFILE
+   LEADERBOARD (MINUS)
 --------------------------------------------------- */
-function showPlayerProfile(name, playerData) {
-  if (!playerData) return;
+function loadLeaderboardMinus(demons) {
+  const players = {};
 
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-  document.getElementById("profile").classList.add("active");
+  demons.forEach(demon => {
+    const demonScore = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
 
-  const container = document.getElementById("profile-container");
-  container.innerHTML = `
-    <h2>${name}</h2>
-    <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
-    <h3>Records:</h3>
-  `;
+    if (Array.isArray(demon.records)) {
+      demon.records.forEach(rec => {
 
-  const records = [...playerData.records].sort((a, b) => a.position - b.position);
+        if (rec.percent === 100 && rec.fromZero === true) {
 
-  records.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "leaderboard-row";
+          if (!players[rec.user]) {
+            players[rec.user] = { score: 0, records: [] };
+          }
 
-    const posLabel = r.position > 75 ? "Legacy" : "#" + r.position;
-    const typeLabel = r.type === "Verification" ? "(Verification)" : "";
+          players[rec.user].score += demonScore;
 
-    div.innerHTML = `
-      <span>${posLabel}</span>
-      <span>${r.demon}</span>
-      <span>${r.percent}% ${typeLabel}</span>
-      ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
-    `;
-    container.appendChild(div);
+          players[rec.user].records.push({
+            demon: demon.name,
+            position: demon.position,
+            link: rec.link
+          });
+        }
+      });
+    }
   });
-}
 
-/* ---------------------------------------------------
-   MODERATORS
---------------------------------------------------- */
-function loadModerators() {
-  const container = document.getElementById("moderators-container");
+  const sorted = Object.entries(players)
+    .map(([name, data]) => ({ name, ...data }))
+    .sort((a, b) => b.score - a.score);
 
-  const mods = [
-    { name: "UniverDemonlist", role: "Super Moderator" },
-    { name: "PowerGreen", role: "Moderator" },
-    { name: "Prometheus", role: "Developer" }
-  ];
+  const container = document.getElementById("leaderboard-minus");
+  container.innerHTML = "";
 
-  mods.forEach(mod => {
+  sorted.forEach((p, i) => {
     const row = document.createElement("div");
-    row.className = "moderator-row";
-
+    row.className = "leaderboard-row";
     row.innerHTML = `
-      <span>${mod.name}</span>
-      <span class="moderator-role">${mod.role}</span>
+      <span>${i + 1}</span>
+      <span>${p.name}</span>
+      <span>${p.score.toFixed(2)}</span>
     `;
-
     container.appendChild(row);
   });
 }
 
 /* ---------------------------------------------------
-   START
+   PLAYER PROFILE
 --------------------------------------------------- */
-loadDemonList();
-loadModerators();
+function showPlayerProfile(name, playerData) {
+  if (!playerData) return;
+
+  document.querySelectorAll(".tab-content").
