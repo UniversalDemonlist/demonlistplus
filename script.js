@@ -71,7 +71,7 @@ async function loadDemonList() {
 }
 
 /* ---------------------------------------------------
-   LOAD DEMONLIST - (0% ONLY)
+   LOAD DEMONLIST -
 --------------------------------------------------- */
 async function loadDemonListMinus() {
   try {
@@ -86,7 +86,7 @@ async function loadDemonListMinus() {
       )
     );
 
-    /* FIXED: assign positions so #undefined disappears */
+    // Assign positions so we don't get #undefined
     minusDemons = demonFiles
       .map((d, i) => (d ? { ...d, position: i + 1 } : null))
       .filter(Boolean);
@@ -97,7 +97,7 @@ async function loadDemonListMinus() {
     });
 
     setupMinusSearch();
-    loadLeaderboardMinus(minusDemons);
+    loadLeaderboardMinus(); // uses minusDemons
   } catch (e) {
     console.error("Error loading Demonlist -:", e);
   }
@@ -385,31 +385,32 @@ function loadLeaderboard() {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD (MINUS)
+   LEADERBOARD - (BASED ONLY ON DEMONLIST -)
 --------------------------------------------------- */
-function loadLeaderboardMinus(demons) {
+function loadLeaderboardMinus() {
   const players = {};
 
-  demons.forEach(demon => {
+  minusDemons.forEach(demon => {
     const demonScore = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
 
     if (Array.isArray(demon.records)) {
       demon.records.forEach(rec => {
 
-        if (rec.percent === 100 && rec.fromZero === true) {
+        // Same scoring style: score ∝ percent
+        const scoreGain = demonScore * (rec.percent / 100);
 
-          if (!players[rec.user]) {
-            players[rec.user] = { score: 0, records: [] };
-          }
-
-          players[rec.user].score += demonScore;
-
-          players[rec.user].records.push({
-            demon: demon.name,
-            position: demon.position,
-            link: rec.link
-          });
+        if (!players[rec.user]) {
+          players[rec.user] = { score: 0, records: [] };
         }
+
+        players[rec.user].score += scoreGain;
+
+        players[rec.user].records.push({
+          demon: demon.name,
+          position: demon.position,
+          percent: rec.percent,
+          link: rec.link
+        });
       });
     }
   });
@@ -419,6 +420,8 @@ function loadLeaderboardMinus(demons) {
     .sort((a, b) => b.score - a.score);
 
   const container = document.getElementById("leaderboard-minus");
+  if (!container) return;
+
   container.innerHTML = "";
 
   sorted.forEach((p, i) => {
