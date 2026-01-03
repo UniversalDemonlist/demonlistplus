@@ -13,5 +13,11 @@
     "image": "assets/badges/gamer.png",
     "title": "Gamer",
     "description": "Successfully beat at least one demon."
-  }
+  },
+    "top1_current": {
+  "image": "assets/badges/top1_current.png",
+  "title": "Current Top 1 Player",
+  "description": "This player is currently ranked #1 on the Demonlist+ leaderboard."
+}
+
 }
