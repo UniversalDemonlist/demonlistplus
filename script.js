@@ -33,21 +33,20 @@ if (localStorage.getItem("theme") === "light") {
 }
 
 /* ---------------------------------------------------
-   GLOBAL DEMON & PLAYER STORAGE
+   GLOBAL STORAGE
 --------------------------------------------------- */
 let globalDemons = [];
 let minusDemons = [];
 let playerCountries = {};
 
 /* ---------------------------------------------------
-   LOAD PLAYER COUNTRIES (players.json)
+   LOAD PLAYER COUNTRIES
 --------------------------------------------------- */
 async function loadPlayerCountries() {
   try {
     playerCountries = await fetch("data/players.json").then(r => r.json());
   } catch (e) {
-    console.warn("players.json not found or invalid:", e);
-    playerCountries = {};
+    console.warn("players.json missing or invalid");
   }
 }
 
@@ -72,19 +71,18 @@ async function loadDemonList() {
       .filter(Boolean);
 
     globalDemons.forEach(demon => {
-      const card = createDemonCard(demon);
-      container.appendChild(card);
+      container.appendChild(createDemonCard(demon));
     });
 
     setupSearchBar();
     loadLeaderboard();
   } catch (e) {
-    console.error("Error loading main demonlist:", e);
+    console.error("Error loading demonlist:", e);
   }
 }
 
 /* ---------------------------------------------------
-   LOAD DEMONLIST - (0% ONLY)
+   LOAD DEMONLIST MINUS
 --------------------------------------------------- */
 async function loadDemonListMinus() {
   try {
@@ -104,8 +102,7 @@ async function loadDemonListMinus() {
       .filter(Boolean);
 
     minusDemons.forEach(demon => {
-      const card = createDemonCard(demon);
-      container.appendChild(card);
+      container.appendChild(createDemonCard(demon));
     });
 
     setupMinusSearch();
@@ -116,35 +113,30 @@ async function loadDemonListMinus() {
 }
 
 /* ---------------------------------------------------
-   SEARCH BAR (MAIN)
+   SEARCH BARS
 --------------------------------------------------- */
 function setupSearchBar() {
   const searchBar = document.getElementById("search-bar");
   if (!searchBar) return;
 
   searchBar.addEventListener("input", () => {
-    const query = searchBar.value.toLowerCase();
-
+    const q = searchBar.value.toLowerCase();
     document.querySelectorAll("#demon-container .demon-card").forEach(card => {
       const name = card.querySelector("h2").textContent.toLowerCase();
-      card.style.display = name.includes(query) ? "flex" : "none";
+      card.style.display = name.includes(q) ? "flex" : "none";
     });
   });
 }
 
-/* ---------------------------------------------------
-   SEARCH BAR (MINUS)
---------------------------------------------------- */
 function setupMinusSearch() {
   const searchBar = document.getElementById("search-bar-minus");
   if (!searchBar) return;
 
   searchBar.addEventListener("input", () => {
-    const query = searchBar.value.toLowerCase();
-
+    const q = searchBar.value.toLowerCase();
     document.querySelectorAll("#demon-container-minus .demon-card").forEach(card => {
       const name = card.querySelector("h2").textContent.toLowerCase();
-      card.style.display = name.includes(query) ? "flex" : "none";
+      card.style.display = name.includes(q) ? "flex" : "none";
     });
   });
 }
@@ -153,38 +145,30 @@ function setupMinusSearch() {
    YOUTUBE HELPERS
 --------------------------------------------------- */
 function getYoutubeThumbnail(url) {
-  if (!url || typeof url !== "string") return null;
-
+  if (!url) return null;
   try {
-    let videoId = null;
-
-    if (url.includes("youtube.com/watch")) {
-      videoId = new URL(url).searchParams.get("v");
-    } else if (url.includes("youtu.be/")) {
-      videoId = url.split("youtu.be/")[1].split("?")[0];
-    }
-
-    if (!videoId || videoId.length < 5) return null;
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-  } catch {
-    return null;
-  }
-}
-
-function extractVideoID(url) {
-  try {
-    if (url.includes("youtube.com/watch")) {
-      return new URL(url).searchParams.get("v");
+    if (url.includes("watch?v=")) {
+      const id = new URL(url).searchParams.get("v");
+      return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
     }
     if (url.includes("youtu.be/")) {
-      return url.split("youtu.be/")[1].split("?")[0];
+      const id = url.split("youtu.be/")[1].split("?")[0];
+      return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
     }
   } catch {}
   return null;
 }
 
+function extractVideoID(url) {
+  try {
+    if (url.includes("watch?v=")) return new URL(url).searchParams.get("v");
+    if (url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0];
+  } catch {}
+  return null;
+}
+
 /* ---------------------------------------------------
-   DEMON CARD (NOW FULLY CLICKABLE)
+   DEMON CARD (CLICKABLE)
 --------------------------------------------------- */
 function createDemonCard(demon) {
   const card = document.createElement("div");
@@ -196,29 +180,25 @@ function createDemonCard(demon) {
   const info = document.createElement("div");
   info.className = "demon-info";
 
-  const creatorsText = Array.isArray(demon.creators)
+  const creators = Array.isArray(demon.creators)
     ? demon.creators.join(", ")
-    : (demon.creators || "Unknown");
+    : demon.creators || "Unknown";
 
-  const demonScore = demon.position <= 75
-    ? (350 / Math.sqrt(demon.position))
-    : 0;
-
-  const positionLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
+  const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+  const posLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
 
   info.innerHTML = `
-    <h2>${positionLabel} — ${demon.name}</h2>
+    <h2>${posLabel} — ${demon.name}</h2>
     <p><strong>Author:</strong> ${demon.author}</p>
-    <p><strong>Creators:</strong> ${creatorsText}</p>
+    <p><strong>Creators:</strong> ${creators}</p>
     <p><strong>Verifier:</strong> ${demon.verifier}</p>
     <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
-    <p><strong>Score Value:</strong> ${demonScore.toFixed(2)}</p>
+    <p><strong>Score Value:</strong> ${score.toFixed(2)}</p>
   `;
 
   card.appendChild(img);
   card.appendChild(info);
 
-  // Make entire card clickable
   card.addEventListener("click", () => openDemonPage(demon));
   card.style.cursor = "pointer";
 
@@ -233,11 +213,9 @@ function openDemonPage(demon) {
   document.getElementById("demon-page").classList.add("active");
 
   const container = document.getElementById("demon-page-container");
-  const positionLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
 
-  const demonScore = demon.position <= 75
-    ? (350 / Math.sqrt(demon.position))
-    : 0;
+  const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+  const posLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
 
   let recordsHTML = "";
 
@@ -261,13 +239,13 @@ function openDemonPage(demon) {
   container.innerHTML = `
     <button class="dropdown-btn back-btn" onclick="goBackToList()">← Back to List</button>
 
-    <h1>${positionLabel} — ${demon.name}</h1>
+    <h1>${posLabel} — ${demon.name}</h1>
 
     <p><strong>Author:</strong> ${demon.author}</p>
-    <p><strong>Creators:</strong> ${Array.isArray(demon.creators) ? demon.creators.join(", ") : (demon.creators || "Unknown")}</p>
+    <p><strong>Creators:</strong> ${Array.isArray(demon.creators) ? demon.creators.join(", ") : demon.creators}</p>
     <p><strong>Verifier:</strong> ${demon.verifier}</p>
     <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
-    <p><strong>Score Value:</strong> ${demonScore.toFixed(2)}</p>
+    <p><strong>Score Value:</strong> ${score.toFixed(2)}</p>
 
     <h2>Verification</h2>
     ${
@@ -287,52 +265,43 @@ function goBackToList() {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD (MAIN) WITH FLAGS
+   LEADERBOARD (MAIN)
 --------------------------------------------------- */
 function loadLeaderboard() {
   const players = {};
 
   globalDemons.forEach(demon => {
-    const pos = demon.position;
-    const demonScore = pos <= 75 ? 350 / Math.sqrt(pos) : 0;
+    const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
 
     if (demon.verifier && demon.verifier !== "Not beaten yet") {
       const name = demon.verifier;
+      if (!players[name]) players[name] = { score: 0, records: [] };
 
-      if (!players[name]) {
-        players[name] = { score: 0, records: [] };
-      }
-
-      players[name].score += demonScore;
-
+      players[name].score += score;
       players[name].records.push({
         demon: demon.name,
         position: demon.position,
         percent: 100,
-        link: demon.verification || null,
+        link: demon.verification,
         type: "Verification"
       });
     }
 
     if (Array.isArray(demon.records)) {
-      demon.records.forEach(rec => {
+      demon.records.forEach(r => {
+        if (r.user === "Not beaten yet") return;
 
-        if (rec.user === "Not beaten yet") return;
+        const name = r.user;
+        const gain = score * (r.percent / 100);
 
-        const playerName = rec.user;
-        const scoreGain = demonScore * (rec.percent / 100);
+        if (!players[name]) players[name] = { score: 0, records: [] };
 
-        if (!players[playerName]) {
-          players[playerName] = { score: 0, records: [] };
-        }
-
-        players[playerName].score += scoreGain;
-
-        players[playerName].records.push({
+        players[name].score += gain;
+        players[name].records.push({
           demon: demon.name,
           position: demon.position,
-          percent: rec.percent,
-          link: rec.link,
+          percent: r.percent,
+          link: r.link,
           type: "Record"
         });
       });
@@ -352,7 +321,7 @@ function loadLeaderboard() {
 
     const country = playerCountries[p.name];
     const flag = country
-      ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png" alt="${country} flag">`
+      ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png">`
       : "";
 
     row.innerHTML = `
@@ -375,29 +344,24 @@ function loadLeaderboard() {
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD (MINUS) WITH FLAGS
+   LEADERBOARD MINUS
 --------------------------------------------------- */
 function loadLeaderboardMinus(demons) {
   const players = {};
 
   demons.forEach(demon => {
-    const demonScore = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+    const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
 
     if (Array.isArray(demon.records)) {
-      demon.records.forEach(rec => {
+      demon.records.forEach(r => {
+        if (r.percent === 100 && r.fromZero) {
+          if (!players[r.user]) players[r.user] = { score: 0, records: [] };
 
-        if (rec.percent === 100 && rec.fromZero === true) {
-
-          if (!players[rec.user]) {
-            players[rec.user] = { score: 0, records: [] };
-          }
-
-          players[rec.user].score += demonScore;
-
-          players[rec.user].records.push({
+          players[r.user].score += score;
+          players[r.user].records.push({
             demon: demon.name,
             position: demon.position,
-            link: rec.link
+            link: r.link
           });
         }
       });
@@ -412,19 +376,17 @@ function loadLeaderboardMinus(demons) {
   container.innerHTML = "";
 
   sorted.forEach((p, i) => {
+    const country = playerCountries[p.name];
+    const flag = country
+      ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png">`
+      : "";
+
     const row = document.createElement("div");
     row.className = "leaderboard-row";
 
-    const country = playerCountries[p.name];
-    const flag = country
-      ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png" alt="${country} flag">`
-      : "";
-
     row.innerHTML = `
       <span>${i + 1}</span>
-      <span>
-        ${flag} ${p.name}
-      </span>
+      <span>${flag} ${p.name}</span>
       <span>${p.score.toFixed(2)}</span>
     `;
 
@@ -433,7 +395,7 @@ function loadLeaderboardMinus(demons) {
 }
 
 /* ---------------------------------------------------
-   PLAYER PROFILE (USES FLAGS TOO)
+   PLAYER PROFILE
 --------------------------------------------------- */
 function showPlayerProfile(name, playerData) {
   if (!playerData) return;
@@ -442,16 +404,17 @@ function showPlayerProfile(name, playerData) {
   document.getElementById("profile").classList.add("active");
 
   const container = document.getElementById("profile-container");
+
   const country = playerCountries[name];
   const flag = country
-    ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png" alt="${country} flag">`
+    ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png">`
     : "";
 
   container.innerHTML = `
     <h2>${flag} ${name}</h2>
     <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
     <h3>Records:</h3>
-  );
+  `;
 
   const records = [...playerData.records].sort((a, b) => a.position - b.position);
 
@@ -468,6 +431,7 @@ function showPlayerProfile(name, playerData) {
       <span>${r.percent ? r.percent + "%" : ""} ${typeLabel}</span>
       ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
     `;
+
     container.appendChild(div);
   });
 }
@@ -498,7 +462,7 @@ function loadModerators() {
 }
 
 /* ---------------------------------------------------
-   START
+   STARTUP
 --------------------------------------------------- */
 loadPlayerCountries();
 loadDemonList();
