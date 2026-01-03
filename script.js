@@ -426,22 +426,19 @@ function loadLeaderboard() {
       showPlayerProfile(name, sorted.find(p => p.name === name));
     });
   });
-
-  loadCountryLeaderboard(sorted);
-    /* ---------------------------------------------------
+/* ---------------------------------------------------
    CURRENT TOP 1 BADGE
 --------------------------------------------------- */
 sorted.forEach((p, index) => {
   const profile = playerProfiles[p.name];
   if (!profile) return;
 
-  // Ensure badges array exists
   if (!profile.badges) profile.badges = [];
 
-  // Remove badge from everyone first
+  // Remove old badge
   profile.badges = profile.badges.filter(b => b !== "top1_current");
 
-  // Assign badge to current #1 only
+  // Assign to current #1
   if (index === 0) {
     profile.badges.push("top1_current");
   }
@@ -476,6 +473,27 @@ if (top1 && Array.isArray(top1.records)) {
       }
     }
   });
+
+  loadCountryLeaderboard(sorted);
+    /* ---------------------------------------------------
+   CURRENT TOP 1 BADGE
+--------------------------------------------------- */
+sorted.forEach((p, index) => {
+  const profile = playerProfiles[p.name];
+  if (!profile) return;
+
+  // Ensure badges array exists
+  if (!profile.badges) profile.badges = [];
+
+  // Remove badge from everyone first
+  profile.badges = profile.badges.filter(b => b !== "top1_current");
+
+  // Assign badge to current #1 only
+  if (index === 0) {
+    profile.badges.push("top1_current");
+  }
+});
+
 }
 
 /* ---------------------------------------------------
@@ -652,5 +670,6 @@ loadBadgeDefinitions();
 loadNewDemons();
 loadDemonList();
 loadModerators();
+
 
 
