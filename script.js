@@ -1,5 +1,5 @@
 /* ---------------------------------------------------
-   TAB SWITCHING
+   MAIN TAB SWITCHING
 --------------------------------------------------- */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -13,11 +13,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
 /* HOME → DEMONLIST BUTTON */
 function openDemonlistFromHome() {
-  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-  document.querySelector('.tab-btn[data-tab="demonlist"]').classList.add("active");
-  document.getElementById("demonlist").classList.add("active");
+  document.querySelector('.tab-btn[data-tab="demonlist"]').click();
 }
 
 /* ---------------------------------------------------
@@ -36,7 +32,6 @@ if (localStorage.getItem("theme") === "light") {
    GLOBAL STORAGE
 --------------------------------------------------- */
 let globalDemons = [];
-let minusDemons = [];
 let playerCountries = {};
 
 /* ---------------------------------------------------
@@ -47,11 +42,12 @@ async function loadPlayerCountries() {
     playerCountries = await fetch("data/players.json").then(r => r.json());
   } catch (e) {
     console.warn("players.json missing or invalid");
+    playerCountries = {};
   }
 }
 
 /* ---------------------------------------------------
-   LOAD MAIN DEMONLIST
+   LOAD DEMONLIST
 --------------------------------------------------- */
 async function loadDemonList() {
   try {
@@ -82,38 +78,7 @@ async function loadDemonList() {
 }
 
 /* ---------------------------------------------------
-   LOAD DEMONLIST MINUS
---------------------------------------------------- */
-async function loadDemonListMinus() {
-  try {
-    const list = await fetch("data/list_minus.json").then(r => r.json());
-    const container = document.getElementById("demon-container-minus");
-
-    const demonFiles = await Promise.all(
-      list.map(id =>
-        fetch(`data/demons/${id}.json`)
-          .then(r => (r.ok ? r.json() : null))
-          .catch(() => null)
-      )
-    );
-
-    minusDemons = demonFiles
-      .map((d, i) => (d ? { ...d, position: i + 1 } : null))
-      .filter(Boolean);
-
-    minusDemons.forEach(demon => {
-      container.appendChild(createDemonCard(demon));
-    });
-
-    setupMinusSearch();
-    loadLeaderboardMinus(minusDemons);
-  } catch (e) {
-    console.error("Error loading Demonlist -:", e);
-  }
-}
-
-/* ---------------------------------------------------
-   SEARCH BARS
+   SEARCH BAR
 --------------------------------------------------- */
 function setupSearchBar() {
   const searchBar = document.getElementById("search-bar");
@@ -122,19 +87,6 @@ function setupSearchBar() {
   searchBar.addEventListener("input", () => {
     const q = searchBar.value.toLowerCase();
     document.querySelectorAll("#demon-container .demon-card").forEach(card => {
-      const name = card.querySelector("h2").textContent.toLowerCase();
-      card.style.display = name.includes(q) ? "flex" : "none";
-    });
-  });
-}
-
-function setupMinusSearch() {
-  const searchBar = document.getElementById("search-bar-minus");
-  if (!searchBar) return;
-
-  searchBar.addEventListener("input", () => {
-    const q = searchBar.value.toLowerCase();
-    document.querySelectorAll("#demon-container-minus .demon-card").forEach(card => {
       const name = card.querySelector("h2").textContent.toLowerCase();
       card.style.display = name.includes(q) ? "flex" : "none";
     });
@@ -200,13 +152,12 @@ function createDemonCard(demon) {
   card.appendChild(info);
 
   card.addEventListener("click", () => openDemonPage(demon));
-  card.style.cursor = "pointer";
 
   return card;
 }
 
 /* ---------------------------------------------------
-   FULL DEMON PAGE
+   DEMON PAGE
 --------------------------------------------------- */
 function openDemonPage(demon) {
   document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
@@ -225,7 +176,7 @@ function openDemonPage(demon) {
         <div class="leaderboard-row">
           <span>${r.user}</span>
           <span>${r.percent}%</span>
-          <span>${r.hz}hz</span>
+          <span>${r.hz || ""}</span>
           ${r.link ? `<a href="${r.link}" target="_blank">Video</a>` : ""}
         </div>
       `;
@@ -237,7 +188,7 @@ function openDemonPage(demon) {
   const videoId = extractVideoID(demon.verification);
 
   container.innerHTML = `
-    <button class="dropdown-btn back-btn" onclick="goBackToList()">← Back to List</button>
+    <button class="back-btn" onclick="goBackToList()">← Back to List</button>
 
     <h1>${posLabel} — ${demon.name}</h1>
 
@@ -260,12 +211,11 @@ function openDemonPage(demon) {
 }
 
 function goBackToList() {
-  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-  document.getElementById("demonlist").classList.add("active");
+  document.querySelector('.tab-btn[data-tab="demonlist"]').click();
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD (MAIN)
+   LEADERBOARD (PLAYERS)
 --------------------------------------------------- */
 function loadLeaderboard() {
   const players = {};
@@ -341,53 +291,44 @@ function loadLeaderboard() {
       showPlayerProfile(name, sorted.find(p => p.name === name));
     });
   });
+
+  loadCountryLeaderboard(sorted);
 }
 
 /* ---------------------------------------------------
-   LEADERBOARD MINUS
+   COUNTRY LEADERBOARD
 --------------------------------------------------- */
-function loadLeaderboardMinus(demons) {
-  const players = {};
+function loadCountryLeaderboard(sortedPlayers) {
+  const countryScores = {};
 
-  demons.forEach(demon => {
-    const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+  sortedPlayers.forEach(player => {
+    const country = playerCountries[player.name];
+    if (!country) return;
 
-    if (Array.isArray(demon.records)) {
-      demon.records.forEach(r => {
-        if (r.percent === 100 && r.fromZero) {
-          if (!players[r.user]) players[r.user] = { score: 0, records: [] };
-
-          players[r.user].score += score;
-          players[r.user].records.push({
-            demon: demon.name,
-            position: demon.position,
-            link: r.link
-          });
-        }
-      });
+    if (!countryScores[country]) {
+      countryScores[country] = 0;
     }
+
+    countryScores[country] += player.score;
   });
 
-  const sorted = Object.entries(players)
-    .map(([name, data]) => ({ name, ...data }))
+  const sortedCountries = Object.entries(countryScores)
+    .map(([code, score]) => ({ code, score }))
     .sort((a, b) => b.score - a.score);
 
-  const container = document.getElementById("leaderboard-minus");
+  const container = document.getElementById("leaderboard-countries");
   container.innerHTML = "";
 
-  sorted.forEach((p, i) => {
-    const country = playerCountries[p.name];
-    const flag = country
-      ? `<img class="flag" src="https://flagcdn.com/24x18/${country.toLowerCase()}.png">`
-      : "";
-
+  sortedCountries.forEach((c, i) => {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
 
+    const flag = `<img class="flag" src="https://flagcdn.com/24x18/${c.code.toLowerCase()}.png">`;
+
     row.innerHTML = `
       <span>${i + 1}</span>
-      <span>${flag} ${p.name}</span>
-      <span>${p.score.toFixed(2)}</span>
+      <span>${flag} ${c.code}</span>
+      <span>${c.score.toFixed(2)}</span>
     `;
 
     container.appendChild(row);
@@ -411,6 +352,7 @@ function showPlayerProfile(name, playerData) {
     : "";
 
   container.innerHTML = `
+    <button class="back-btn" onclick="goBackToList()">← Back</button>
     <h2>${flag} ${name}</h2>
     <p><strong>Total score:</strong> ${playerData.score.toFixed(2)}</p>
     <h3>Records:</h3>
@@ -435,6 +377,23 @@ function showPlayerProfile(name, playerData) {
     container.appendChild(div);
   });
 }
+
+/* ---------------------------------------------------
+   SUB-TABS (Leaderboard internal tabs)
+--------------------------------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".subtab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.subtab;
+
+      document.querySelectorAll(".subtab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".subtab-content").forEach(c => c.classList.remove("active"));
+
+      btn.classList.add("active");
+      document.getElementById(target).classList.add("active");
+    });
+  });
+});
 
 /* ---------------------------------------------------
    MODERATORS
@@ -466,5 +425,4 @@ function loadModerators() {
 --------------------------------------------------- */
 loadPlayerCountries();
 loadDemonList();
-loadDemonListMinus();
 loadModerators();
