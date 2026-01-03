@@ -1,6 +1,4 @@
-/* ---------------------------------------------------
-   THEME VARIABLES
---------------------------------------------------- */
+/* THEME VARIABLES */
 :root {
   --bg: #111;
   --text: #f5f5f5;
@@ -19,9 +17,7 @@
   --button-hover: #ccc;
 }
 
-/* ---------------------------------------------------
-   GLOBAL
---------------------------------------------------- */
+/* GLOBAL */
 * {
   box-sizing: border-box;
 }
@@ -34,9 +30,7 @@ body {
   padding: 70px 20px 20px;
 }
 
-/* ---------------------------------------------------
-   THEME TOGGLE
---------------------------------------------------- */
+/* THEME TOGGLE */
 #theme-toggle {
   position: fixed;
   top: 15px;
@@ -50,9 +44,7 @@ body {
   z-index: 1000;
 }
 
-/* ---------------------------------------------------
-   TABS
---------------------------------------------------- */
+/* TABS */
 .tabs {
   position: fixed;
   top: 15px;
@@ -87,9 +79,7 @@ body {
   display: block;
 }
 
-/* ---------------------------------------------------
-   HOME
---------------------------------------------------- */
+/* HOME */
 #home button {
   padding: 10px 18px;
   background: var(--button);
@@ -99,9 +89,7 @@ body {
   cursor: pointer;
 }
 
-/* ---------------------------------------------------
-   SEARCH
---------------------------------------------------- */
+/* SEARCH */
 #search-bar {
   width: 100%;
   padding: 10px;
@@ -112,9 +100,7 @@ body {
   margin: 10px 0 20px;
 }
 
-/* ---------------------------------------------------
-   DEMON CARDS
---------------------------------------------------- */
+/* DEMON CARDS */
 #demon-container {
   display: flex;
   flex-direction: column;
@@ -155,9 +141,17 @@ body {
   font-size: 0.9rem;
 }
 
-/* ---------------------------------------------------
-   DEMON PAGE & PROFILE
---------------------------------------------------- */
+/* NEW BADGE */
+.new-badge {
+  background: #ff4444;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-left: 6px;
+}
+
+/* DEMON PAGE & PROFILE */
 .back-btn {
   margin-bottom: 12px;
   padding: 8px 14px;
@@ -172,9 +166,7 @@ body {
   max-width: 100%;
 }
 
-/* ---------------------------------------------------
-   LEADERBOARD
---------------------------------------------------- */
+/* LEADERBOARD */
 .subtabs {
   display: flex;
   gap: 10px;
@@ -207,15 +199,14 @@ body {
 #leaderboard-container,
 #leaderboard-countries,
 #profile-container,
-#moderators-container {
+#moderators-container,
+#news-container {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* ---------------------------------------------------
-   ROWS & FLAGS
---------------------------------------------------- */
+/* ROWS & FLAGS */
 .leaderboard-row,
 .moderator-row {
   display: flex;
@@ -240,9 +231,7 @@ body {
   cursor: pointer;
 }
 
-/* ---------------------------------------------------
-   RESPONSIVE
---------------------------------------------------- */
+/* RESPONSIVE */
 @media (max-width: 700px) {
   .demon-card {
     flex-direction: column;
