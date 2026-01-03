@@ -1,103 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="google-site-verification" content="oPWkE9dnPzFeZaFHBjk0ycv9S7UTV2wH0k2zD24GjD0" />
   <meta charset="UTF-8">
-  <title>Demonlist Plus</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Demonlist+</title>
+  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- IMPORTANT: your file is named style.css -->
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- FLOATING THEME TOGGLE -->
-  <button id="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+<button id="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="home">Home</button>
-    <button class="tab-btn" data-tab="demonlist">Demonlist</button>
-    <button class="tab-btn" data-tab="demonlist-minus">Demonlist -</button>
-    <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
-    <button class="tab-btn" data-tab="leaderboard-minus-tab">Leaderboard -</button>
-    <button class="tab-btn" data-tab="moderators">Moderators</button>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="home">Home</button>
+  <button class="tab-btn" data-tab="demonlist">Demonlist</button>
+  <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
+  <button class="tab-btn" data-tab="moderators">Moderators</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="tab-content active">
+  <h1>Welcome to Demonlist+</h1>
+  <p>A modern, clean, community‑driven Geometry Dash demonlist.</p>
+  <button onclick="openDemonlistFromHome()">View Demonlist</button>
+</div>
+
+<!-- DEMONLIST -->
+<div id="demonlist" class="tab-content">
+  <h1>Demonlist</h1>
+  <input id="search-bar" placeholder="Search demons...">
+  <div id="demon-container"></div>
+</div>
+
+<!-- DEMON PAGE -->
+<div id="demon-page" class="tab-content">
+  <div id="demon-page-container"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="tab-content">
+  <h1>Leaderboard</h1>
+
+  <div class="subtabs">
+    <button class="subtab-btn active" data-subtab="lb-players">Players</button>
+    <button class="subtab-btn" data-subtab="lb-countries">Countries</button>
   </div>
 
-  <!-- HOME TAB -->
-  <div id="home" class="tab-content active">
-    <h1>Demonlist +</h1>
-
-    <p><strong>Welcome to the Demonlist +</strong></p>
-
-    <p>
-      An alternative to the Pointercrate list. Our goal is to provide a transparent, community-driven
-      demonlist that values every player opinion. We rank unrated levels because every achievement deserves recognition.
-      Record submitter: https://sites.google.com/view/aedlr/record-submitter
-    </p>
-
-    <h2>Recent Updates</h2>
-
-    <ul class="updates-list">
-      <li>You can see recent updates in the link above</li>
-    </ul>
-
-    <button class="dropdown-btn" onclick="openDemonlistFromHome()">
-      Go to Demonlist
-    </button>
-  </div>
-
-  <!-- DEMONLIST TAB -->
-  <div id="demonlist" class="tab-content">
-    <h1>Demonlist</h1>
-
-    <input type="text" id="search-bar" placeholder="Search demons...">
-
-    <div id="demon-container"></div>
-  </div>
-
-  <!-- DEMONLIST - TAB (LIST ONLY) -->
-  <div id="demonlist-minus" class="tab-content">
-    <h1>Demonlist -</h1>
-
-    <input type="text" id="search-bar-minus" placeholder="Search demons...">
-
-    <div id="demon-container-minus"></div>
-  </div>
-
-  <!-- LEADERBOARD TAB (MAIN LIST) -->
-  <div id="leaderboard" class="tab-content">
-    <h1>Leaderboard</h1>
+  <div id="lb-players" class="subtab-content active">
     <div id="leaderboard-container"></div>
   </div>
 
-  <!-- LEADERBOARD - TAB (ONLY DEMONLIST - DEMONS) -->
-  <div id="leaderboard-minus-tab" class="tab-content">
-    <h1>Leaderboard -</h1>
-    <div id="leaderboard-minus"></div>
+  <div id="lb-countries" class="subtab-content">
+    <div id="leaderboard-countries"></div>
   </div>
+</div>
 
-  <!-- MODERATORS TAB -->
-  <div id="moderators" class="tab-content">
-    <h1>Moderators</h1>
-    <div id="moderators-container"></div>
-  </div>
+<!-- PLAYER PROFILE -->
+<div id="profile" class="tab-content">
+  <div id="profile-container"></div>
+</div>
 
-  <!-- PLAYER PROFILE TAB -->
-  <div id="profile" class="tab-content">
-    <h1>Player profile</h1>
-    <div id="profile-container"></div>
-  </div>
+<!-- MODERATORS -->
+<div id="moderators" class="tab-content">
+  <h1>Moderators</h1>
+  <div id="moderators-container"></div>
+</div>
 
-  <!-- FULL DEMON PAGE TAB -->
-  <div id="demon-page" class="tab-content">
-    <div id="demon-page-container"></div>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
-
-
-
