@@ -1,78 +1,91 @@
 {
   "Zoink": {
     "country": "US",
+    "badges": ["former_top1"],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "PowerGreen": {
     "country": "IT",
+    "badges": ["moderator"],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "wPopoff": {
     "country": "US",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Trick": {
     "country": "US",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "BelgioneArancio": {
     "country": "IT",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Cuatrocientos": {
     "country": "ES",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "zLevii": {
     "country": "NZ",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Whizkid05": {
     "country": "GB",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Cursed": {
     "country": "GB",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "ROZE": {
     "country": "RU",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "eastshark": {
     "country": "ES",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Doggie": {
     "country": "US",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
   },
   "Taiago": {
     "country": "PT",
+    "badges": [],
     "bio": "",
     "social": {},
     "favorites": []
