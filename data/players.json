@@ -1,7 +1,7 @@
 {
   "Zoink": {
     "country": "US",
-    "badges": ["former_top1"],
+    "badges": [],
     "bio": "Gd player 🥱🥱 Top 1 player on pointercrate",
     "social": {
       "youtube": "https://www.youtube.com/@Zoink"
@@ -10,7 +10,7 @@
   },
   "PowerGreen": {
     "country": "IT",
-    "badges": ["moderator"],
+    "badges": ["moderator","former_top1"],
     "bio": "I Play Cube Game",
     "social": {},
     "favorites": ["Flamewall"]
