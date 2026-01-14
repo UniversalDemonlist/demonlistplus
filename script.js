@@ -135,6 +135,32 @@ async function loadDemonList() {
     console.error("Error loading demonlist:", e);
   }
 }
+async function loadDemonListMinus() {
+  try {
+    const list = await fetch("data/list_minus.json").then(r => r.json());
+    const container = document.getElementById("demon-container-2");
+
+    const demonFiles = await Promise.all(
+      list.map(id =>
+        fetch(`data/demons/${id}.json`)
+          .then(r => (r.ok ? r.json() : null))
+          .catch(() => null)
+      )
+    );
+
+    globalDemonsMinus = demonFiles
+      .map((d, i) => (d ? { ...d, position: i + 1 } : null))
+      .filter(Boolean);
+
+    globalDemonsMinus.forEach(demon => {
+      container.appendChild(createDemonCard(demon));
+    });
+
+  } catch (e) {
+    console.error("Error loading minus list:", e);
+  }
+}
+
 
 /* ---------------------------------------------------
    SEARCH BAR
@@ -643,5 +669,6 @@ loadBadgeDefinitions();
 loadNewDemons();
 loadDemonList();
 loadModerators();
+
 
 
