@@ -1,278 +1,232 @@
-/* THEME VARIABLES */
-:root {
-  --bg: #111;
-  --text: #f5f5f5;
-  --card: #1a1a1a;
-  --border: #333;
-  --button: #333;
-  --button-hover: #444;
-}
+/* ---------------------------------------------------
+   FONT IMPORT
+--------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-.light-mode {
-  --bg: #f5f5f5;
-  --text: #111;
-  --card: #ffffff;
-  --border: #ccc;
-  --button: #ddd;
-  --button-hover: #ccc;
-}
-
-/* GLOBAL */
-* {
-  box-sizing: border-box;
-}
-
+/* ---------------------------------------------------
+   GLOBAL STYLES
+--------------------------------------------------- */
 body {
   font-family: 'Montserrat', sans-serif;
-  background: var(--bg);
-  color: var(--text);
   margin: 0;
-  padding: 70px 20px 20px;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #222;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* THEME TOGGLE */
-#theme-toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background: var(--button);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 8px 14px;
-  border-radius: 6px;
+body.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------
+   TABS
+--------------------------------------------------- */
+.tab-btn, .subtab-btn {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  background-color: #ddd;
   cursor: pointer;
-  z-index: 1000;
-}
-
-/* TABS */
-.tabs {
-  position: fixed;
-  top: 15px;
-  left: 20px;
-  display: flex;
-  gap: 10px;
-  z-index: 900;
-}
-
-.tab-btn {
-  padding: 8px 16px;
-  background: var(--button);
-  border: 1px solid var(--border);
-  color: var(--text);
   border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-.tab-btn.active {
-  background: #4da3ff;
-  border-color: #4da3ff;
+.tab-btn.active, .subtab-btn.active {
+  background-color: #0077cc;
+  color: white;
 }
 
-.tab-content {
+.tab-content, .subtab-content {
   display: none;
-  max-width: 1000px;
-  margin: 0 auto;
+  padding: 20px;
 }
 
-.tab-content.active {
+.tab-content.active, .subtab-content.active {
   display: block;
 }
 
-/* HOME */
-#home button {
-  padding: 10px 18px;
-  background: var(--button);
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  color: var(--text);
-  cursor: pointer;
-}
-
-/* SEARCH */
+/* ---------------------------------------------------
+   SEARCH BAR
+--------------------------------------------------- */
 #search-bar {
   width: 100%;
+  max-width: 400px;
   padding: 10px;
+  margin: 20px auto;
+  display: block;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--text);
-  margin: 10px 0 20px;
+  font-size: 15px;
 }
 
-/* DEMON CARDS */
-#demon-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
+/* ---------------------------------------------------
+   DEMON CARDS (WITH DASHED CONTOUR)
+--------------------------------------------------- */
 .demon-card {
+  border: 2px dashed #b5b5b5;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 22px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   display: flex;
-  gap: 16px;
-  background: var(--card);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  transition: 0.15s ease;
-  cursor: pointer;
+  gap: 20px;
+  align-items: center;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .demon-card:hover {
-  transform: translateY(-2px);
-  border-color: #4da3ff;
+  border-color: #888;
+  background-color: #fafafa;
 }
 
 .demon-card img {
-  width: 220px;
-  height: 125px;
+  width: 240px;
+  height: 140px;
   object-fit: cover;
   border-radius: 8px;
-  flex-shrink: 0;
 }
 
 .demon-info h2 {
-  margin: 0 0 6px;
-  font-size: 1.2rem;
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .demon-info p {
-  margin: 2px 0;
-  font-size: 0.9rem;
+  margin: 4px 0;
+  font-size: 14px;
 }
 
-/* NEW BADGE */
 .new-badge {
-  background: #ff4444;
+  background-color: crimson;
   color: white;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.7rem;
-  margin-left: 6px;
+  font-size: 12px;
+  margin-left: 8px;
 }
 
-/* DEMON PAGE & PROFILE */
-.back-btn {
-  margin-bottom: 12px;
-  padding: 8px 14px;
-  background: var(--button);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  cursor: pointer;
-}
-
-#demon-page iframe {
-  max-width: 100%;
-}
-
-/* LEADERBOARD */
-.subtabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.subtab-btn {
-  padding: 8px 16px;
-  background: var(--button);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.subtab-btn.active {
-  background: #4da3ff;
-  border-color: #4da3ff;
-}
-
-.subtab-content {
-  display: none;
-}
-
-.subtab-content.active {
-  display: block;
-}
-
-#leaderboard-container,
-#leaderboard-countries,
-#profile-container,
-#moderators-container,
-#news-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* ROWS & FLAGS */
-.leaderboard-row,
-.moderator-row {
+/* ---------------------------------------------------
+   LEADERBOARD
+--------------------------------------------------- */
+.leaderboard-row {
   display: flex;
   justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px dashed #ccc;
+  font-size: 14px;
   align-items: center;
-  background: var(--card);
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  font-size: 0.9rem;
+}
+
+.leaderboard-row:hover {
+  background-color: #f9f9f9;
 }
 
 .flag {
-  width: 20px;
-  height: 14px;
   margin-right: 6px;
-  border-radius: 2px;
   vertical-align: middle;
 }
 
 .clickable-player {
   cursor: pointer;
+  font-weight: 600;
 }
 
-/* RESPONSIVE */
-@media (max-width: 700px) {
-  .demon-card {
-    flex-direction: column;
-  }
-
-  .tabs {
-    flex-wrap: wrap;
-  }
+/* ---------------------------------------------------
+   BADGES
+--------------------------------------------------- */
+.mini-badge {
+  height: 18px;
+  margin-left: 4px;
+  vertical-align: middle;
 }
 
 .badge-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .full-badge {
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 12px;
-  background: var(--card);
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px dashed #aaa;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background-color: #ffffff;
 }
 
 .badge-icon {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
+  height: 32px;
 }
 
 .badge-text {
-  font-size: 0.9rem;
-  line-height: 1.2rem;
+  font-size: 13px;
 }
 
-.mini-badge {
-  width: 18px;
-  height: 18px;
-  margin-left: 4px;
-  vertical-align: middle;
+/* ---------------------------------------------------
+   PROFILE PAGE
+--------------------------------------------------- */
+#profile-container {
+  padding: 20px;
+}
+
+#profile-container h2 {
+  margin-top: 0;
+}
+
+#profile-container ul {
+  padding-left: 20px;
+}
+
+#profile-container li {
+  margin-bottom: 4px;
+}
+
+/* ---------------------------------------------------
+   DEMON PAGE
+--------------------------------------------------- */
+#demon-page-container iframe {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+.back-btn {
+  background-color: #eee;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------
+   MODERATOR LIST
+--------------------------------------------------- */
+.moderator-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.moderator-role {
+  font-style: italic;
+  color: #666;
 }
