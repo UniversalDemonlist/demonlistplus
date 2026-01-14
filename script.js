@@ -33,6 +33,7 @@ if (localStorage.getItem("theme") === "light") {
    GLOBAL DATA
 --------------------------------------------------- */
 let globalDemons = [];
+let globalDemonsMinus = [];
 let playerProfiles = {};
 let playerCountries = {};
 let newDemons = [];
@@ -642,4 +643,5 @@ loadBadgeDefinitions();
 loadNewDemons();
 loadDemonList();
 loadModerators();
+
 
