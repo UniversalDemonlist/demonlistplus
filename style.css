@@ -313,3 +313,55 @@ body.dark-mode .moderator-row {
   font-style: italic;
   color: #666;
 }
+/* ---------------------------------------------------
+   DEMON PAGE CENTERING
+--------------------------------------------------- */
+.demon-page-center {
+  text-align: center;
+}
+
+.demon-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.demon-page-center iframe {
+  margin: 0 auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* ---------------------------------------------------
+   POSITION HISTORY
+--------------------------------------------------- */
+.history-box {
+  border: 2px dashed #b5b5b5;
+  padding: 14px;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.75);
+  margin-top: 15px;
+  backdrop-filter: blur(4px);
+}
+
+.history-row {
+  padding: 6px 0;
+  font-size: 14px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.history-row:last-child {
+  border-bottom: none;
+}
+
+/* dark mode */
+body.dark-mode .history-box {
+  background-color: rgba(20,20,20,0.6);
+  border-color: #666;
+}
+
+body.dark-mode .history-row {
+  border-bottom-color: #555;
+}
+
+
