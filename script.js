@@ -257,8 +257,8 @@ function openDemonPage(demon) {
 
   const container = document.getElementById("demon-page-container");
 
-  const score = demon.position <= 150 ? 350 / Math.sqrt(demon.position) : 0;
-  const posLabel = demon.position > 150 ? "Legacy" : "#" + demon.position;
+  const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
+  const posLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
 
   // -------------------------------
   // RECORDS
@@ -700,6 +700,7 @@ loadNewDemons();
 loadDemonList();
 loadDemonListMinus();
 loadModerators();
+
 
 
 
