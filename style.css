@@ -1,238 +1,76 @@
 /* ---------------------------------------------------
-   FONT IMPORT
---------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
-/* ---------------------------------------------------
-   GLOBAL STYLES
+   GLOBAL BACKGROUND IMAGE (BLURRED)
 --------------------------------------------------- */
 body {
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  color: #222;
-  transition: background-color 0.3s, color 0.3s;
+  background: url("bg.png") center/cover no-repeat fixed;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
 }
 
-body.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-a {
-  color: #0077cc;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+/* Soft overlay to keep text readable */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: -1;
 }
 
 /* ---------------------------------------------------
-   TABS
+   DARK MODE FIX
 --------------------------------------------------- */
-.tab-btn, .subtab-btn {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  background-color: #ddd;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: 600;
+body.dark-mode {
+  color: #e6e6e6;
 }
 
-.tab-btn.active, .subtab-btn.active {
-  background-color: #0077cc;
-  color: white;
+body.dark-mode::before {
+  background: rgba(0, 0, 0, 0.55);
 }
 
-.tab-content, .subtab-content {
-  display: none;
-  padding: 20px;
+/* Buttons */
+body.dark-mode button,
+body.dark-mode .tab-btn,
+body.dark-mode .subtab-btn {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444;
 }
 
-.tab-content.active, .subtab-content.active {
-  display: block;
+body.dark-mode .tab-btn.active,
+body.dark-mode .subtab-btn.active {
+  background-color: #444 !important;
 }
 
-/* ---------------------------------------------------
-   SEARCH BAR
---------------------------------------------------- */
-#search-bar {
-  width: 100%;
-  max-width: 400px;
-  padding: 10px;
-  margin: 20px auto;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 15px;
+/* Inputs */
+body.dark-mode input {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #555;
 }
 
-/* ---------------------------------------------------
-   DEMON CARDS (WITH DASHED CONTOUR)
---------------------------------------------------- */
-.demon-card {
-  border: 2px dashed #b5b5b5;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 22px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  transition: border-color 0.2s, background-color 0.2s;
+/* Demon cards */
+body.dark-mode .demon-card {
+  background-color: rgba(20, 20, 20, 0.7);
+  border-color: #666;
 }
 
-.demon-card:hover {
-  border-color: #888;
-  background-color: #fafafa;
+body.dark-mode .demon-card:hover {
+  background-color: rgba(40, 40, 40, 0.7);
 }
 
-.demon-card img {
-  width: 240px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 8px;
+/* Leaderboard rows */
+body.dark-mode .leaderboard-row {
+  border-bottom-color: #555;
 }
 
-.demon-info h2 {
-  margin: 0 0 8px;
-  font-size: 20px;
-  font-weight: 600;
+body.dark-mode .leaderboard-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-.demon-info p {
-  margin: 4px 0;
-  font-size: 14px;
+/* Moderator list */
+body.dark-mode .moderator-row {
+  border-bottom-color: #555;
 }
-
-.new-badge {
-  background-color: crimson;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  margin-left: 8px;
-}
-
-/* ---------------------------------------------------
-   LEADERBOARD
---------------------------------------------------- */
-.leaderboard-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px dashed #ccc;
-  font-size: 14px;
-  align-items: center;
-}
-
-.leaderboard-row:hover {
-  background-color: #f9f9f9;
-}
-
-.flag {
-  margin-right: 6px;
-  vertical-align: middle;
-}
-
-.clickable-player {
-  cursor: pointer;
-  font-weight: 600;
-}
-
-/* ---------------------------------------------------
-   BADGES
---------------------------------------------------- */
-.mini-badge {
-  height: 18px;
-  margin-left: 4px;
-  vertical-align: middle;
-}
-
-.badge-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.full-badge {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  border: 1px dashed #aaa;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background-color: #ffffff;
-}
-
-.badge-icon {
-  height: 32px;
-}
-
-.badge-text {
-  font-size: 13px;
-}
-
-/* ---------------------------------------------------
-   PROFILE PAGE
---------------------------------------------------- */
-#profile-container {
-  padding: 20px;
-}
-
-#profile-container h2 {
-  margin-top: 0;
-}
-
-#profile-container ul {
-  padding-left: 20px;
-}
-
-#profile-container li {
-  margin-bottom: 4px;
-}
-
-/* ---------------------------------------------------
-   DEMON PAGE
---------------------------------------------------- */
-#demon-page-container iframe {
-  max-width: 100%;
-  border-radius: 6px;
-  margin: 10px 0;
-}
-
-.back-btn {
-  background-color: #eee;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-weight: 500;
-}
-
-/* ---------------------------------------------------
-   MODERATOR LIST
---------------------------------------------------- */
-.moderator-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 12px;
-  border-bottom: 1px dashed #ccc;
-}
-
-.moderator-role {
-  font-style: italic;
-  color: #666;
-}
-
-
-
-
-
-
