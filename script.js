@@ -260,6 +260,9 @@ function openDemonPage(demon) {
   const score = demon.position <= 75 ? 350 / Math.sqrt(demon.position) : 0;
   const posLabel = demon.position > 75 ? "Legacy" : "#" + demon.position;
 
+  // -------------------------------
+  // RECORDS
+  // -------------------------------
   let recordsHTML = "";
 
   if (Array.isArray(demon.records) && demon.records.length > 0) {
@@ -277,12 +280,34 @@ function openDemonPage(demon) {
     recordsHTML = "<p>No records yet.</p>";
   }
 
+  // -------------------------------
+  // HISTORY (safe fallback)
+  // -------------------------------
+  const historyHTML =
+    demon.history && Array.isArray(demon.history) && demon.history.length > 0
+      ? demon.history
+          .map((pos, i) => `<div class="history-row">Update ${i + 1}: #${pos}</div>`)
+          .join("")
+      : "<div class='history-row'>No history available</div>";
+
+  // -------------------------------
+  // VIDEO EMBED
+  // -------------------------------
   const videoId = extractVideoID(demon.verification);
 
   container.innerHTML = `
     <button class="back-btn" onclick="goBackToList()">← Back to List</button>
 
-    <h1>${posLabel} — ${demon.name}</h1>
+    <div class="demon-page-center">
+      <h1 class="demon-page-title">${posLabel} — ${demon.name}</h1>
+
+      <h2>Verification</h2>
+      ${
+        videoId
+          ? `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`
+          : "<p>No verification video.</p>"
+      }
+    </div>
 
     <p><strong>Author:</strong> ${demon.author}</p>
     <p><strong>Creators:</strong> ${Array.isArray(demon.creators) ? demon.creators.join(", ") : demon.creators}</p>
@@ -290,12 +315,10 @@ function openDemonPage(demon) {
     <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
     <p><strong>Score Value:</strong> ${score.toFixed(2)}</p>
 
-    <h2>Verification</h2>
-    ${
-      videoId
-        ? `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`
-        : "<p>No verification video.</p>"
-    }
+    <h2>Position History</h2>
+    <div class="history-box">
+      ${historyHTML}
+    </div>
 
     <h2>Records</h2>
     ${recordsHTML}
@@ -305,6 +328,7 @@ function openDemonPage(demon) {
 function goBackToList() {
   document.querySelector('.tab-btn[data-tab="demonlist"]').click();
 }
+
 
 /* ---------------------------------------------------
    MINI BADGES (LEADERBOARD)
@@ -670,6 +694,7 @@ loadNewDemons();
 loadDemonList();
 loadDemonListMinus();
 loadModerators();
+
 
 
 
