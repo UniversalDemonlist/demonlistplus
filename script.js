@@ -291,29 +291,40 @@ function openDemonPage(demon) {
       : "<div class='history-row'>No history available</div>";
 
   // -------------------------------
-  // VIDEO EMBED
+  // VIDEO EMBED (centered)
   // -------------------------------
   const videoId = extractVideoID(demon.verification);
 
+  const videoHTML = videoId
+    ? `
+      <div class="video-center">
+        <iframe 
+          width="560" 
+          height="315" 
+          src="https://www.youtube.com/embed/${videoId}" 
+          frameborder="0" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    `
+    : "<p>No verification video.</p>";
+
+  // -------------------------------
+  // PAGE CONTENT
+  // -------------------------------
   container.innerHTML = `
     <button class="back-btn" onclick="goBackToList()">← Back to List</button>
 
-    <div class="demon-page-center">
-      <h1 class="demon-page-title">${posLabel} — ${demon.name}</h1>
-
-      <h2>Verification</h2>
-      ${
-        videoId
-          ? `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`
-          : "<p>No verification video.</p>"
-      }
-    </div>
+    <h1 class="demon-page-title">${posLabel} — ${demon.name}</h1>
 
     <p><strong>Author:</strong> ${demon.author}</p>
     <p><strong>Creators:</strong> ${Array.isArray(demon.creators) ? demon.creators.join(", ") : demon.creators}</p>
     <p><strong>Verifier:</strong> ${demon.verifier}</p>
     <p><strong>Percent to Qualify:</strong> ${demon.percentToQualify}%</p>
     <p><strong>Score Value:</strong> ${score.toFixed(2)}</p>
+
+    <h2>Verification</h2>
+    ${videoHTML}
 
     <h2>Position History</h2>
     <div class="history-box">
@@ -328,6 +339,7 @@ function openDemonPage(demon) {
 function goBackToList() {
   document.querySelector('.tab-btn[data-tab="demonlist"]').click();
 }
+
 
 
 /* ---------------------------------------------------
@@ -694,6 +706,7 @@ loadNewDemons();
 loadDemonList();
 loadDemonListMinus();
 loadModerators();
+
 
 
 
