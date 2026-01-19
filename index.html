@@ -31,8 +31,25 @@
   <h1>Demonlist</h1>
 
   <div class="blue-cube-bg">
+
+    <!-- SEARCH BAR -->
     <input id="search-bar" placeholder="Search demons...">
+
+    <!-- NEW LIST DROPDOWN BUTTONS -->
+    <div id="list-filter-buttons">
+        <button class="filter-btn" data-dropdown="main">Main List</button>
+        <button class="filter-btn" data-dropdown="extended">Extended List</button>
+        <button class="filter-btn" data-dropdown="legacy">Legacy List</button>
+    </div>
+
+    <!-- NEW DROPDOWN PANELS -->
+    <div id="dropdown-main" class="list-dropdown"></div>
+    <div id="dropdown-extended" class="list-dropdown"></div>
+    <div id="dropdown-legacy" class="list-dropdown"></div>
+
+    <!-- NORMAL DEMON LIST -->
     <div id="demon-container"></div>
+
   </div>
 </div>
 
