@@ -697,9 +697,10 @@ function loadModerators() {
 loadPlayerCountries();
 loadBadgeDefinitions();
 loadNewDemons();
-loadDemonList();
+loadDemonList().then(buildListDropdowns);
 loadDemonListMinus();
 loadModerators();
+
 
 
 
