@@ -7,5 +7,12 @@
     "verification": "https://www.youtube.com/watch?v=16Zh8jssanc",
     "percentToQualify": 100,
     "password": "30607",
-    "records": []
+    "records": [
+        {
+            "user": "UserInterface",
+            "link": "https://www.youtube.com/watch?v=YTLoIxXetQ4",
+            "percent": 100,
+            "hz": 360
+        }
+    ]
 }
