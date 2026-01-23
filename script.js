@@ -760,6 +760,14 @@ function dc_generate() {
     return;
   }
 
+  // Get the filename (required for list.json)
+  const filename = document.getElementById("dc-filename").value.trim();
+  if (!filename) {
+    alert("You must enter a filename.");
+    return;
+  }
+
+  // Build the demon object
   const newDemon = {
     id: Number(document.getElementById("dc-id").value),
     name: document.getElementById("dc-name").value,
@@ -774,20 +782,24 @@ function dc_generate() {
 
   const placement = Number(document.getElementById("dc-placement").value);
 
-  // Insert into list
-  existingList.splice(placement - 1, 0, newDemon);
+  // 1️⃣ Build updated demon object list (for preview only)
+  const updatedDemons = [...existingList];
+  updatedDemons.splice(placement - 1, 0, newDemon);
+  updatedDemons.forEach((d, i) => d.position = i + 1);
 
-  // Recalculate positions
-  existingList.forEach((d, i) => d.position = i + 1);
+  // 2️⃣ Build updated list.json (filenames only)
+  const updatedListJson = [...window.originalListJson]; // original filenames
+  updatedListJson.splice(placement - 1, 0, filename);
 
-  // Output 1: the demon template
+  // Output demon JSON
   document.getElementById("dc-new-demon").textContent =
     JSON.stringify(newDemon, null, 4);
 
-  // Output 2: the updated list.json
+  // Output updated list.json
   document.getElementById("dc-updated-list").textContent =
-    JSON.stringify(existingList, null, 4);
+    JSON.stringify(updatedListJson, null, 4);
 }
+
 
 
 
