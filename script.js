@@ -742,6 +742,46 @@ loadDemonList().then(buildListDropdowns);
 loadDemonListMinus();
 loadModerators();
 
+function dc_generate() {
+  // Use the demonlist already loaded by your site
+  const existingList = window.demonList ? [...window.demonList] : [];
+
+  if (!existingList.length) {
+    alert("Your demonlist is not loaded yet.");
+    return;
+  }
+
+  const newDemon = {
+    id: Number(document.getElementById("dc-id").value),
+    name: document.getElementById("dc-name").value,
+    author: document.getElementById("dc-author").value,
+    creators: document.getElementById("dc-creators").value.split(",").map(s => s.trim()),
+    verifier: document.getElementById("dc-verifier").value,
+    verification: document.getElementById("dc-verification").value,
+    percentToQualify: Number(document.getElementById("dc-percent").value),
+    password: document.getElementById("dc-password").value,
+    records: []
+  };
+
+  const placement = Number(document.getElementById("dc-placement").value);
+
+  // Insert into list
+  existingList.splice(placement - 1, 0, newDemon);
+
+  // Recalculate positions
+  existingList.forEach((d, i) => d.position = i + 1);
+
+  // Output 1: the demon template
+  document.getElementById("dc-new-demon").textContent =
+    JSON.stringify(newDemon, null, 4);
+
+  // Output 2: the updated list.json
+  document.getElementById("dc-updated-list").textContent =
+    JSON.stringify(existingList, null, 4);
+}
+
+
+
 
 
 
