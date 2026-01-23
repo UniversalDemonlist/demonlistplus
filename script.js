@@ -785,19 +785,19 @@ const fallbackThumb = videoID
 
 // Build demon object
 const newDemon = {
-  id: Number(document.getElementById("dc-id").value),
+  id: Number(document.getElementById("dc-id").value,
   name: document.getElementById("dc-name").value,
-  author: document.getElementById("dc-author").value),
+  author: document.getElementById("dc-author").value,
   creators: document.getElementById("dc-creators").value.split(",").map(s => s.trim()),
   verifier: document.getElementById("dc-verifier").value,
   verification: verificationLink,
-  percentToQualify: Number(document.getElementById("dc-percent").value),
+  percentToQualify: Number(document.getElementById("dc-percent").value,
   password: document.getElementById("dc-password").value,
   thumbnail: customThumb || fallbackThumb, // ⭐ AUTO‑FALLBACK
   records: []
 };
 
-  const placement = Number(document.getElementById("dc-placement").value);
+  const placement = Number(document.getElementById("dc-placement").value;
 
   // 1️⃣ Build updated demon object list (for preview only)
   const updatedDemons = [...existingList];
@@ -816,6 +816,7 @@ const newDemon = {
   document.getElementById("dc-updated-list").textContent =
     JSON.stringify(updatedListJson, null, 4);
 }
+
 
 
 
