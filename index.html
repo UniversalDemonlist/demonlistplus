@@ -21,7 +21,6 @@
   <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
   <button class="tab-btn" data-tab="moderators">Moderators</button>
   <button class="tab-btn" data-tab="creator">Demon Creator (MOD)</button>
-
 </div>
 
 <div id="home" class="tab-content active">
@@ -86,8 +85,48 @@
   <div id="moderators-container"></div>
 </div>
 
+<!-- ⭐ NEW DEMON CREATOR TAB ⭐ -->
+<div id="creator" class="tab-content">
+  <h1>Demon Creator (MOD)</h1>
+
+  <h2>New Demon Info</h2>
+
+  <label>ID</label>
+  <input id="dc-id" type="number">
+
+  <label>Name</label>
+  <input id="dc-name" type="text">
+
+  <label>Author</label>
+  <input id="dc-author" type="text">
+
+  <label>Creators (comma separated)</label>
+  <input id="dc-creators" type="text">
+
+  <label>Verifier</label>
+  <input id="dc-verifier" type="text">
+
+  <label>Verification Link</label>
+  <input id="dc-verification" type="text">
+
+  <label>Percent to Qualify</label>
+  <input id="dc-percent" type="number" value="1">
+
+  <label>Password</label>
+  <input id="dc-password" type="text">
+
+  <label>Placement (1 = top)</label>
+  <input id="dc-placement" type="number">
+
+  <button onclick="dc_generate()">Generate JSON</button>
+
+  <h2>Generated Demon JSON</h2>
+  <pre id="dc-new-demon"></pre>
+
+  <h2>Updated list.json</h2>
+  <pre id="dc-updated-list"></pre>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
-
-
