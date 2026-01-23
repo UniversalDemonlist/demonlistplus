@@ -108,9 +108,6 @@ async function loadNewDemons() {
 /* ---------------------------------------------------
    LOAD DEMONLIST
 --------------------------------------------------- */
-/* ---------------------------------------------------
-   LOAD DEMONLIST
---------------------------------------------------- */
 async function loadDemonList() {
   try {
     const list = await fetch("data/list.json").then(r => r.json());
@@ -137,10 +134,15 @@ async function loadDemonList() {
 
     setupSearchBar();
     loadLeaderboard();
+
+    // ⭐ REQUIRED FIX
+    return globalDemons;
+
   } catch (e) {
     console.error("Error loading demonlist:", e);
   }
 }
+
 
 async function loadDemonListMinus() {
   try {
@@ -786,6 +788,7 @@ function dc_generate() {
   document.getElementById("dc-updated-list").textContent =
     JSON.stringify(existingList, null, 4);
 }
+
 
 
 
