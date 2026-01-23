@@ -111,6 +111,8 @@ async function loadNewDemons() {
 async function loadDemonList() {
   try {
     const list = await fetch("data/list.json").then(r => r.json());
+    window.originalListJson = list; // ⭐ REQUIRED FOR DEMON CREATOR
+
     const container = document.getElementById("demon-container");
 
     const demonFiles = await Promise.all(
@@ -125,8 +127,7 @@ async function loadDemonList() {
       .map((d, i) => (d ? { ...d, position: i + 1 } : null))
       .filter(Boolean);
 
-    // ⭐ MAKE DEMONLIST AVAILABLE TO DEMON CREATOR
-    window.demonList = globalDemons;
+    window.demonList = globalDemons; // ⭐ DEMON OBJECTS
 
     globalDemons.forEach(demon => {
       container.appendChild(createDemonCard(demon));
@@ -135,13 +136,13 @@ async function loadDemonList() {
     setupSearchBar();
     loadLeaderboard();
 
-    // ⭐ REQUIRED FIX
     return globalDemons;
 
   } catch (e) {
     console.error("Error loading demonlist:", e);
   }
 }
+
 
 
 async function loadDemonListMinus() {
@@ -799,6 +800,7 @@ function dc_generate() {
   document.getElementById("dc-updated-list").textContent =
     JSON.stringify(updatedListJson, null, 4);
 }
+
 
 
 
